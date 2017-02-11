@@ -8,6 +8,10 @@
 
 using namespace cv;
 
+void logSdlError(const std::string &msg) {
+  std::cout << msg << "error: " << SDL_GetError() << std::endl;
+}
+
 int displaySdl() {
   VideoCapture cap;
   if (cap.open(0)) {
@@ -34,7 +38,7 @@ int displaySdl() {
 
   // Init SDL
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-    std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+    logSdlError("SDL_Init Error: ");
     return 1;
   }
 
@@ -48,8 +52,7 @@ int displaySdl() {
   SDL_Window *win =
       SDL_CreateWindow("Hello World!", 100, 100, 320, 240, SDL_WINDOW_SHOWN);
   if (win == nullptr) {
-    std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-    SDL_Quit();
+    logSdlError("SDL_CreateWindow Error: ");
     return 1;
   }
 
@@ -58,8 +61,7 @@ int displaySdl() {
       win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (ren == nullptr) {
     SDL_DestroyWindow(win);
-    std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-    SDL_Quit();
+    logSdlError("SDL_CreateRenderer Error: ");
     return 1;
   }
 
@@ -131,9 +133,7 @@ int displaySdl() {
     if (tex == nullptr) {
       SDL_DestroyRenderer(ren);
       SDL_DestroyWindow(win);
-      std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError()
-                << std::endl;
-      SDL_Quit();
+      logSdlError("SDL_CreateTextureFromSurface Error: ");
       return 1;
     }
 
@@ -144,9 +144,7 @@ int displaySdl() {
     if (backgroundTex == nullptr) {
       SDL_DestroyRenderer(ren);
       SDL_DestroyWindow(win);
-      std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError()
-                << std::endl;
-      SDL_Quit();
+      logSdlError("SDL_CreateTextureFromSurface Error: ");
       return 1;
     }
 

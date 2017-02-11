@@ -65,7 +65,13 @@ int displaySdl() {
   Mat imageGray;
   Mat handMask;
   Mat backMask;
+
+  // Mat with alpha channel used to give the hand to SDL
+  Mat output;
   SDL_Surface* surface;
+  SDL_Surface* backgroundSurface;
+
+  output.create(240, 320, CV_8UC4);
 
   bool done = false;
   SDL_Event e;
@@ -92,24 +98,40 @@ int displaySdl() {
     threshold(imageGray, backMask, 20, 255, THRESH_BINARY | THRESH_OTSU);
     bitwise_not(backMask, handMask);
 
-    image.setTo(Scalar(255, 0, 0), backMask);
-    image.setTo(Scalar(0, 255, 0), handMask);
+    output.setTo(Scalar(0, 0, 0, 0), backMask);
+    output.setTo(Scalar(255, 0, 0, 255), handMask);
 
-    surface = SDL_CreateRGBSurfaceFrom(image.ptr(0),
-        image.size().width,
-        image.size().height,
-        24, // depth
-        image.step,  // pitch
+    // This holds the foreground (i.e. the hand)
+    surface = SDL_CreateRGBSurfaceFrom(output.ptr(0),
+        output.size().width,
+        output.size().height,
+        32, // depth
+        output.step,  // pitch
+        0xff000000,
         0x00ff0000,
-        0x000000ff,
         0x0000ff00,
-        0);
+        0x000000ff);
 
     if (surface == nullptr) {
       printf("Convert image failed: %s\n", SDL_GetError());
     }
 
-    // Upload image to the renderer
+    // This holds the background (i.e. the raw image from the camera)
+    backgroundSurface = SDL_CreateRGBSurfaceFrom(image.ptr(0),
+        image.size().width,
+        image.size().height,
+        24, // depth
+        image.step,  // pitch
+        0x00ff0000,
+        0x0000ff00,
+        0x00ff0000,
+        0);
+
+    if (backgroundSurface == nullptr) {
+      printf("Convert background image failed: %s\n", SDL_GetError());
+    }
+
+    // Upload foreground image to the renderer
     SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, surface);
     SDL_FreeSurface(surface);
     if (tex == nullptr){
@@ -120,15 +142,29 @@ int displaySdl() {
       return 1;
     }
 
+    // Upload background image to the renderer
+    SDL_Texture *backgroundTex = SDL_CreateTextureFromSurface(ren, backgroundSurface);
+    SDL_FreeSurface(backgroundSurface);
+    if (backgroundTex == nullptr){
+      SDL_DestroyRenderer(ren);
+      SDL_DestroyWindow(win);
+      std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
+      SDL_Quit();
+      return 1;
+    }
+
     //First clear the renderer
     SDL_RenderClear(ren);
 
-    //Draw the texture
+    //Draw the textures
+    SDL_RenderCopy(ren, backgroundTex, NULL, NULL);
     SDL_RenderCopy(ren, tex, NULL, NULL);
 
     //Update the screen
     SDL_RenderPresent(ren);
 
+    // Cleanup
+    SDL_DestroyTexture(backgroundTex);
     SDL_DestroyTexture(tex);
   }
 

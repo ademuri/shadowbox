@@ -32,6 +32,13 @@ int displaySdl() {
   if (!cap.set(CAP_PROP_FRAME_HEIGHT, 240)) {
     std::cout << "Couldn't set the height" << std::endl;
   }
+  if (!cap.set(CAP_PROP_AUTO_EXPOSURE, 0.25)) {
+    std::cout << "couldn't set auto exposure" << std::endl;
+  }
+  // NOTE: this exposure value was chosen to make the hand light and the background dark
+  if (!cap.set(CAP_PROP_EXPOSURE, 0.005)) {
+    std::cout << "couldn't set exposure" << std::endl;
+  }
 
   // TODO: investigate capturing directly in grayscale
   /*if (!cap.set(CV_CAP_PROP_FORMAT, CV_8UC1)) {

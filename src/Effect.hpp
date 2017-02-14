@@ -36,6 +36,12 @@ protected:
    */
   SDL_Surface *createRGBASurface(cv::Mat &frame) const;
 
+  /** Creates an RGB texture for the given OpenCV Mat. */
+  SDL_Texture *createRGBTexture(cv::Mat &frame);
+
+  /** Creates an RGBA texture for the given OpenCV Mat. */
+  SDL_Texture *createRGBATexture(cv::Mat &frame);
+
 private:
 };
 

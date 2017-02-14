@@ -23,13 +23,10 @@ void BasicHighlight::render(const cv::Mat &frame) {
   // Surface that holds the image from the camera
   SDL_Surface *backgroundSurface;
 
-  cvtColor(frame, imageGray, COLOR_RGB2GRAY);
-
-  threshold(imageGray, backMask, 20, 255, THRESH_BINARY | THRESH_OTSU);
-  bitwise_not(backMask, handMask);
-
-  output.setTo(Scalar(0, 0, 0, 0), backMask);
-  output.setTo(Scalar(255, 0, 0, 255), handMask);
+  // Highlight the hand in red, and make the rest of output transparent.
+  findHand(frame, handMask, backMask);
+  output.setTo(Scalar(255, 0, 0, 255), backMask);
+  output.setTo(Scalar(0, 0, 0, 0), handMask);
 
   // This holds the foreground (i.e. the hand)
   surface = SDL_CreateRGBSurfaceFrom(
@@ -39,7 +36,8 @@ void BasicHighlight::render(const cv::Mat &frame) {
       0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
 
   if (surface == nullptr) {
-    printf("Convert image failed: %s\n", SDL_GetError());
+    logSdlError("Convert image failed: ");
+    return;
   }
 
   // This holds the background (i.e. the raw image from the camera)
@@ -50,7 +48,8 @@ void BasicHighlight::render(const cv::Mat &frame) {
       0x00ff0000, 0x0000ff00, 0x00ff0000, 0);
 
   if (backgroundSurface == nullptr) {
-    printf("Convert background image failed: %s\n", SDL_GetError());
+    logSdlError("Convert background image failed: ");
+    return;
   }
 
   // Upload foreground image to the renderer

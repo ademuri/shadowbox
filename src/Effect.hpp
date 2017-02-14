@@ -10,7 +10,7 @@
  */
 class Effect {
 public:
-  Effect(const SDL_Renderer *renderer) { this->renderer = renderer; }
+  Effect(const SDL_Renderer *renderer);
 
   /** Render one frame.
    * Called each time a new frame is retreived from the camera.
@@ -19,6 +19,13 @@ public:
 
 protected:
   const SDL_Renderer *renderer;
+
+  /** Find the hand and put the hand and background masks into the provided
+   * Mats. */
+  void findHand(const cv::Mat frame, cv::Mat &handMask, cv::Mat &backMask);
+  cv::Mat imageGray;
+
+private:
 };
 
 #endif

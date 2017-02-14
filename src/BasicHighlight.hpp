@@ -12,7 +12,6 @@ public:
   void render(const cv::Mat &frame) override;
 
 private:
-  cv::Mat imageGray;
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat output;

@@ -35,7 +35,8 @@ int displaySdl() {
   if (!cap.set(CAP_PROP_AUTO_EXPOSURE, 0.25)) {
     std::cout << "couldn't set auto exposure" << std::endl;
   }
-  // NOTE: this exposure value was chosen to make the hand light and the background dark
+  // NOTE: this exposure value was chosen to make the hand light and the
+  // background dark
   if (!cap.set(CAP_PROP_EXPOSURE, 0.005)) {
     std::cout << "couldn't set exposure" << std::endl;
   }

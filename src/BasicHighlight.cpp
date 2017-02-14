@@ -16,7 +16,7 @@ BasicHighlight::BasicHighlight(SDL_Renderer *const renderer)
 // TODO: extract this into some sort of util
 extern void logSdlError(const std::string &msg);
 
-void BasicHighlight::render(const cv::Mat &frame) {
+void BasicHighlight::render(cv::Mat &frame) {
   // Surface that holds the hand
   SDL_Surface *surface;
 
@@ -29,11 +29,7 @@ void BasicHighlight::render(const cv::Mat &frame) {
   output.setTo(Scalar(0, 0, 0, 0), handMask);
 
   // This holds the foreground (i.e. the hand)
-  surface = SDL_CreateRGBSurfaceFrom(
-      output.ptr(0), output.size().width, output.size().height,
-      32,          // depth
-      output.step, // pitch
-      0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+  surface = createRGBASurface(output);
 
   if (surface == nullptr) {
     logSdlError("Convert image failed: ");
@@ -41,11 +37,7 @@ void BasicHighlight::render(const cv::Mat &frame) {
   }
 
   // This holds the background (i.e. the raw image from the camera)
-  backgroundSurface = SDL_CreateRGBSurfaceFrom(
-      (void *)frame.ptr(0), frame.size().width, frame.size().height,
-      24,         // depth
-      frame.step, // pitch
-      0x00ff0000, 0x0000ff00, 0x00ff0000, 0);
+  backgroundSurface = createRGBSurface(frame);
 
   if (backgroundSurface == nullptr) {
     logSdlError("Convert background image failed: ");

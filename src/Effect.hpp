@@ -12,19 +12,29 @@ class Effect {
 public:
   Effect(SDL_Renderer *const renderer_);
 
-  /** Render one frame.
+  /** Renders one frame.
    * Called each time a new frame is retreived from the camera.
    */
-  virtual void render(const cv::Mat &frame) = 0;
+  virtual void render(cv::Mat &frame) = 0;
 
 protected:
+  cv::Mat imageGray;
   SDL_Renderer *const renderer;
 
-  /** Find the hand and put the hand and background masks into the provided
+  /** Finds the hand and puts the hand and background masks into the provided
    * Mats.
    */
   void findHand(const cv::Mat frame, cv::Mat &handMask, cv::Mat &backMask);
-  cv::Mat imageGray;
+
+  /** Creates an RGB SDL surface for the given OpenCV Mat.
+   * Uses the BGR pixel ordering.
+   */
+  SDL_Surface *createRGBSurface(cv::Mat &frame) const;
+
+  /** Creates an RGBA SDL surface for the given OpenCV Mat.
+   * Uses the RGBA pixel ordering.
+   */
+  SDL_Surface *createRGBASurface(cv::Mat &frame) const;
 
 private:
 };

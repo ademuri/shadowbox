@@ -9,7 +9,7 @@ class BasicHighlight : public Effect {
 public:
   BasicHighlight(SDL_Renderer *const renderer_);
 
-  void render(const cv::Mat &frame) override;
+  void render(cv::Mat &frame) override;
 
 private:
   cv::Mat handMask;

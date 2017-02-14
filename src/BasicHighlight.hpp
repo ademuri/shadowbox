@@ -7,7 +7,7 @@
 
 class BasicHighlight : public Effect {
 public:
-  BasicHighlight(const SDL_Renderer *renderer);
+  BasicHighlight(SDL_Renderer *const renderer_);
 
   void render(const cv::Mat &frame) override;
 

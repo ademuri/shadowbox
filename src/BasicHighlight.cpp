@@ -8,7 +8,7 @@
 
 using namespace cv;
 
-BasicHighlight::BasicHighlight(const SDL_Renderer *renderer)
+BasicHighlight::BasicHighlight(SDL_Renderer *const renderer)
     : Effect(renderer) {
   output.create(240, 320, CV_8UC4);
 }
@@ -53,8 +53,7 @@ void BasicHighlight::render(const cv::Mat &frame) {
   }
 
   // Upload foreground image to the renderer
-  SDL_Texture *tex =
-      SDL_CreateTextureFromSurface((SDL_Renderer *)renderer, surface);
+  SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
   if (tex == nullptr) {
     logSdlError("SDL_CreateTextureFromSurface Error: ");
@@ -63,7 +62,7 @@ void BasicHighlight::render(const cv::Mat &frame) {
 
   // Upload background image to the renderer
   SDL_Texture *backgroundTex =
-      SDL_CreateTextureFromSurface((SDL_Renderer *)renderer, backgroundSurface);
+      SDL_CreateTextureFromSurface(renderer, backgroundSurface);
   SDL_FreeSurface(backgroundSurface);
   if (backgroundTex == nullptr) {
     logSdlError("SDL_CreateTextureFromSurface Error: ");
@@ -71,14 +70,14 @@ void BasicHighlight::render(const cv::Mat &frame) {
   }
 
   // First clear the renderer
-  SDL_RenderClear((SDL_Renderer *)renderer);
+  SDL_RenderClear(renderer);
 
   // Draw the textures
-  SDL_RenderCopy((SDL_Renderer *)renderer, backgroundTex, NULL, NULL);
-  SDL_RenderCopy((SDL_Renderer *)renderer, tex, NULL, NULL);
+  SDL_RenderCopy(renderer, backgroundTex, NULL, NULL);
+  SDL_RenderCopy(renderer, tex, NULL, NULL);
 
   // Update the screen
-  SDL_RenderPresent((SDL_Renderer *)renderer);
+  SDL_RenderPresent(renderer);
 
   // Cleanup
   SDL_DestroyTexture(backgroundTex);

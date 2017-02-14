@@ -59,7 +59,7 @@ int displaySdl() {
   atexit(SDL_Quit);
 
   // Make a window
-  SDL_Window *win =
+  SDL_Window *const win =
       SDL_CreateWindow("Hello World!", 100, 100, 320, 240, SDL_WINDOW_SHOWN);
   if (win == nullptr) {
     logSdlError("SDL_CreateWindow Error: ");
@@ -67,7 +67,7 @@ int displaySdl() {
   }
 
   // Create a renderer
-  SDL_Renderer *ren = SDL_CreateRenderer(
+  SDL_Renderer *const ren = SDL_CreateRenderer(
       win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (ren == nullptr) {
     SDL_DestroyWindow(win);
@@ -77,7 +77,7 @@ int displaySdl() {
 
   Mat image;
 
-  Effect *effect = new BasicHighlight(ren);
+  Effect *const effect = new BasicHighlight(ren);
 
   bool done = false;
   SDL_Event e;

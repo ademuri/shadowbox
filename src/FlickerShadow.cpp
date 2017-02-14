@@ -1,4 +1,4 @@
-#include "BasicHighlight.hpp"
+#include "FlickerShadow.hpp"
 #include <SDL2/SDL.h>
 #include <cv.h>
 #include <iostream>
@@ -8,18 +8,30 @@
 
 using namespace cv;
 
-BasicHighlight::BasicHighlight(SDL_Renderer *const renderer)
-    : Effect(renderer) {
+FlickerShadow::FlickerShadow(SDL_Renderer *const renderer) : Effect(renderer) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
+
+  // Create a static, solid-color background
+  background.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3);
+  background = Scalar(0, 0, 255, 0);
+
+  flickerCountdown = 100;
 }
 
 // TODO: extract this into some sort of util
 extern void logSdlError(const std::string &msg);
 
-void BasicHighlight::render(cv::Mat &frame) {
+void FlickerShadow::render(cv::Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
-  output.setTo(Scalar(255, 0, 0, 255), backMask);
+
+  flickerCountdown--;
+  if (flickerCountdown <= 0) {
+    output.setTo(Scalar(255, 0, 0, 255), backMask);
+    flickerCountdown = (rand() % 100) + 10;
+  } else {
+    output.setTo(Scalar(0, 0, 0, 255), backMask);
+  }
   output.setTo(Scalar(0, 0, 0, 0), handMask);
 
   // Upload foreground image to the renderer
@@ -30,7 +42,7 @@ void BasicHighlight::render(cv::Mat &frame) {
   }
 
   // Upload background image to the renderer
-  SDL_Texture *backgroundTex = createRGBTexture(frame);
+  SDL_Texture *backgroundTex = createRGBTexture(background);
   if (backgroundTex == nullptr) {
     logSdlError("SDL_CreateTextureFromSurface Error: ");
     return;

@@ -1,5 +1,6 @@
 add_executable(DisplayImage DisplayImage.cpp)
 target_sources(DisplayImage PUBLIC Effect.hpp Effect.cpp)
 target_sources(DisplayImage PUBLIC BasicHighlight.hpp BasicHighlight.cpp)
+target_sources(DisplayImage PUBLIC FlickerShadow.hpp FlickerShadow.cpp)
 target_link_libraries(DisplayImage ${SDL2_LIBRARY} ${OpenCV_LIBS})
 install(TARGETS DisplayImage RUNTIME DESTINATION ${BIN_DIR})

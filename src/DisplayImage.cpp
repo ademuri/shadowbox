@@ -1,5 +1,6 @@
 #include "BasicHighlight.hpp"
 #include "Effect.hpp"
+#include "FlickerShadow.hpp"
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
@@ -77,7 +78,7 @@ int displaySdl() {
 
   Mat image;
 
-  Effect *const effect = new BasicHighlight(ren);
+  Effect *const effect = new FlickerShadow(ren);
 
   bool done = false;
   SDL_Event e;

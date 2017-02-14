@@ -26,7 +26,7 @@ SDL_Surface *Effect::createRGBASurface(cv::Mat &frame) const {
       frame.ptr(0), frame.size().width, frame.size().height,
       32,         // depth
       frame.step, // pitch
-      0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
+      0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 }
 
 SDL_Texture *Effect::createRGBTexture(cv::Mat &frame) {

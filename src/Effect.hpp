@@ -42,6 +42,9 @@ protected:
   /** Creates an RGBA texture for the given OpenCV Mat. */
   SDL_Texture *createRGBATexture(cv::Mat &frame);
 
+  static const int IMAGE_WIDTH = 320;
+  static const int IMAGE_HEIGHT = 240;
+
 private:
 };
 

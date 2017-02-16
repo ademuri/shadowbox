@@ -5,8 +5,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
-  lastFramerateAt = SDL_GetTicks();
-  calcFramerateAt = lastFramerateAt + 1000;
+  calcFramerateAt = SDL_GetTicks() + 1000;
   frames = 0;
 }
 

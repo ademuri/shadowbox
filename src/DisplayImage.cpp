@@ -1,4 +1,5 @@
 #include "BasicHighlight.hpp"
+#include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
 #include <SDL2/SDL.h>
@@ -78,7 +79,7 @@ int displaySdl() {
 
   Mat image;
 
-  Effect *const effect = new FlickerShadow(ren);
+  Effect *const effect = new BasicTracer(ren);
 
   bool done = false;
   SDL_Event e;

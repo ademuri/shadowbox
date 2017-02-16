@@ -11,8 +11,7 @@ using namespace cv;
 // TODO: extract this into some sort of util
 extern void logSdlError(const std::string &msg);
 
-BasicTracer::BasicTracer(SDL_Renderer *const renderer)
-    : Effect(renderer) {
+BasicTracer::BasicTracer(SDL_Renderer *const renderer) : Effect(renderer) {
   handImage.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   accumulator.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);

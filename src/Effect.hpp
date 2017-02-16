@@ -17,6 +17,12 @@ public:
    */
   virtual void render(cv::Mat &frame) = 0;
 
+  /** Prints the current framerate, in FPS, to the console.
+   * Note that this is approximate - every ~1000ms, it counts the frames. It
+   * doesn't divide by the actual elapsed time.
+   */
+  void calculateFramerate();
+
 protected:
   cv::Mat imageGray;
   SDL_Renderer *const renderer;
@@ -46,6 +52,11 @@ protected:
   static const int IMAGE_HEIGHT = 240;
 
 private:
+  // The time at which to calculate the framerate, as given by SDL_GetTicks
+  Uint32 calcFramerateAt;
+
+  // The number of frames since lastFramerateAt
+  int frames;
 };
 
 #endif

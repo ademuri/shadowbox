@@ -55,14 +55,14 @@ int displaySdl() {
   }
 
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
   atexit(SDL_Quit);
 
   // Make a window
   SDL_Window *const win =
-      SDL_CreateWindow("Hello World!", 100, 100, 320, 240, SDL_WINDOW_SHOWN);
+      SDL_CreateWindow("Hello World!", 300, 100, 320, 240, SDL_WINDOW_SHOWN);
   if (win == nullptr) {
     logSdlError("SDL_CreateWindow Error: ");
     return 1;
@@ -70,11 +70,21 @@ int displaySdl() {
 
   // Create a renderer
   SDL_Renderer *const ren = SDL_CreateRenderer(
-      win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+      // win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+      win, -1, SDL_RENDERER_ACCELERATED);
   if (ren == nullptr) {
     SDL_DestroyWindow(win);
     logSdlError("SDL_CreateRenderer Error: ");
     return 1;
+  }
+
+  // TODO: investigate what the best combination of these is for the screen
+  if (SDL_GL_SetSwapInterval(0)) {
+    logSdlError("Unable to disable VSync");
+  }
+
+  if (SDL_SetHint(SDL_HINT_RENDER_VSYNC, 0)) {
+    logSdlError("Unable to disable VSync hint");
   }
 
   Mat image;
@@ -102,6 +112,7 @@ int displaySdl() {
 
     cap.read(image);
     effect->render(image);
+    effect->calculateFramerate();
   }
 
   SDL_DestroyRenderer(ren);

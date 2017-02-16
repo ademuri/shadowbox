@@ -4,7 +4,11 @@
 #include <iostream>
 #include <opencv2/imgproc/imgproc.hpp>
 
-Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {}
+Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
+  lastFramerateAt = SDL_GetTicks();
+  calcFramerateAt = lastFramerateAt + 1000;
+  frames = 0;
+}
 
 void Effect::findHand(const cv::Mat frame, cv::Mat &handMask,
                       cv::Mat &backMask) {
@@ -49,4 +53,16 @@ SDL_Texture *Effect::createRGBATexture(cv::Mat &frame) {
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
   return texture;
+}
+
+void Effect::calculateFramerate() {
+  Uint32 ticks = SDL_GetTicks();
+  frames++;
+  if (ticks > calcFramerateAt) {
+    std::cout << "Framerate: " << frames << std::endl;
+
+    // Calculate the framerate again in about 1s
+    calcFramerateAt = SDL_GetTicks() + 999;
+    frames = 0;
+  }
 }

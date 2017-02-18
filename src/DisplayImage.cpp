@@ -1,10 +1,7 @@
-#define GL_GLEXT_PROTOTYPES 1
-
 #include "BasicHighlight.hpp"
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
-#include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
@@ -59,29 +56,17 @@ int displaySdl() {
 
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
   atexit(SDL_Quit);
 
   // Make a window
-  SDL_Window *const win = SDL_CreateWindow(
-      "Hello World!", 300, 100, 320, 240, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+  SDL_Window *const win =
+      SDL_CreateWindow("Hello World!", 300, 100, 320, 240, SDL_WINDOW_SHOWN);
   if (win == nullptr) {
     logSdlError("SDL_CreateWindow Error: ");
     return 1;
   }
-
-  SDL_GLContext context = SDL_GL_CreateContext(win);
-  if (context == nullptr) {
-    logSdlError("SDL_GL_CreateContext: ");
-    return 1;
-  }
-  const GLubyte *version = glGetString(GL_VERSION);
-  if (version == 0) {
-    logSdlError("GL Version: ");
-    return 1;
-  }
-  std::cout << "Version: " << version << std::endl;
 
   // Create a renderer
   SDL_Renderer *const ren = SDL_CreateRenderer(

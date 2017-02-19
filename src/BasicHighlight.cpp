@@ -8,8 +8,8 @@
 
 using namespace cv;
 
-BasicHighlight::BasicHighlight(SDL_Renderer *const renderer)
-    : Effect(renderer) {
+BasicHighlight::BasicHighlight(GPU_Target *const window)
+    : Effect(window) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 }
 
@@ -22,8 +22,25 @@ void BasicHighlight::render(cv::Mat &frame) {
   output.setTo(Scalar(255, 0, 0, 255), backMask);
   output.setTo(Scalar(0, 0, 0, 0), handMask);
 
+  SDL_Surface *surface = createRGBSurface(frame);
+  if (surface == nullptr) {
+    logSdlError("createRGBASurface Error: ");
+    return;
+  }
+
+  //GPU_Image *gpuImage = GPU_CopyImageFromSurface(surface);
+  GPU_Image* gpuImage = GPU_LoadImage("smile.jpeg");
+  //std::cout << "Width: " << gpuImage->w << ", height: " << gpuImage->h << std::endl;
+
+  GPU_Clear(window);
+  GPU_Blit(gpuImage, nullptr, window, 0, 0);
+  GPU_Flip(window);
+
+  SDL_FreeSurface(surface);
+  GPU_FreeImage(gpuImage);
+
   // Upload foreground image to the renderer
-  SDL_Texture *tex = createRGBATexture(output);
+  /*SDL_Texture *tex = createRGBATexture(output);
   if (tex == nullptr) {
     logSdlError("SDL_CreateTextureFromSurface Error: ");
     return;
@@ -48,5 +65,5 @@ void BasicHighlight::render(cv::Mat &frame) {
 
   // Cleanup
   SDL_DestroyTexture(backgroundTex);
-  SDL_DestroyTexture(tex);
+  SDL_DestroyTexture(tex);*/
 }

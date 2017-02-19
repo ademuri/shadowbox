@@ -1,7 +1,6 @@
 #include "BasicHighlight.hpp"
-#include "BasicTracer.hpp"
 #include "Effect.hpp"
-#include "FlickerShadow.hpp"
+#include <SDL_gpu_GLES_3.h>
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
@@ -48,48 +47,37 @@ int displaySdl() {
     std::cout << "Couldn't set the format" << std::endl;
     }*/
 
-  // Init SDL
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-    logSdlError("SDL_Init Error: ");
+
+  GPU_SetDebugLevel(GPU_DEBUG_LEVEL_MAX);
+  GPU_Target* window = GPU_Init(800, 600, GPU_DEFAULT_INIT_FLAGS);
+  if (window == nullptr) {
+    std::cout << "Unable to create window" << std::endl;
     return 1;
   }
 
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+  /*SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);*/
 
-  atexit(SDL_Quit);
-
-  // Make a window
-  SDL_Window *const win =
-      SDL_CreateWindow("Hello World!", 300, 100, 320, 240, SDL_WINDOW_SHOWN);
-  if (win == nullptr) {
-    logSdlError("SDL_CreateWindow Error: ");
-    return 1;
-  }
-
-  // Create a renderer
-  SDL_Renderer *const ren = SDL_CreateRenderer(
-      // win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-      win, -1, SDL_RENDERER_ACCELERATED);
-  if (ren == nullptr) {
-    SDL_DestroyWindow(win);
-    logSdlError("SDL_CreateRenderer Error: ");
-    return 1;
-  }
+  atexit(GPU_Quit);
 
   // TODO: investigate what the best combination of these is for the screen
-  if (SDL_GL_SetSwapInterval(0)) {
+  /*if (SDL_GL_SetSwapInterval(0)) {
     logSdlError("Unable to disable VSync");
   }
 
   if (SDL_SetHint(SDL_HINT_RENDER_VSYNC, 0)) {
     logSdlError("Unable to disable VSync hint");
+  }*/
+
+  //Mat image;
+  GPU_Image* image = GPU_LoadImage("smile.jpeg");
+  if (image == nullptr) {
+    std::cout << "Unable to load image" << std::endl;
+    return 1;
   }
 
-  Mat image;
-
-  Effect *const effect = new BasicTracer(ren);
+  //Effect *const effect = new BasicHighlight(window);
 
   bool done = false;
   SDL_Event e;
@@ -110,15 +98,19 @@ int displaySdl() {
       break;
     }
 
-    cap.read(image);
+    GPU_ClearRGBA(window, 255, 255, 255, 255);
+        // Remember that GPU_Blit() draws the image *centered* at the given position
+        //GPU_Blit(image, NULL, window, image->w/2, image->h/2);
+        // Show the result in the window
+        GPU_Flip(window);
+
+    /*(cap.read(image);
     effect->render(image);
-    effect->calculateFramerate();
+    effect->calculateFramerate();*/
   }
 
-  SDL_DestroyRenderer(ren);
-  SDL_DestroyWindow(win);
-  SDL_Quit();
 
+  //GPU_Quit();
   cap.release();
   return 0;
 }

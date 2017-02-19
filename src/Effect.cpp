@@ -4,7 +4,7 @@
 #include <iostream>
 #include <opencv2/imgproc/imgproc.hpp>
 
-Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
+Effect::Effect(GPU_Target *const window) : window(window) {
   calcFramerateAt = SDL_GetTicks() + 1000;
   frames = 0;
 }
@@ -32,7 +32,7 @@ SDL_Surface *Effect::createRGBASurface(cv::Mat &frame) const {
       0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 }
 
-SDL_Texture *Effect::createRGBTexture(cv::Mat &frame) {
+/*SDL_Texture *Effect::createRGBTexture(cv::Mat &frame) {
   SDL_Surface *surface = createRGBSurface(frame);
   if (surface == nullptr) {
     return nullptr;
@@ -52,7 +52,7 @@ SDL_Texture *Effect::createRGBATexture(cv::Mat &frame) {
   SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
   SDL_FreeSurface(surface);
   return texture;
-}
+}*/
 
 void Effect::calculateFramerate() {
   Uint32 ticks = SDL_GetTicks();

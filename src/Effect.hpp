@@ -1,6 +1,7 @@
 #ifndef __EFFECT_HPP__
 #define __EFFECT_HPP__
 
+#include <SDL_gpu.h>
 #include <SDL2/SDL.h>
 #include <cv.h>
 
@@ -10,7 +11,7 @@
  */
 class Effect {
 public:
-  Effect(SDL_Renderer *const renderer_);
+  Effect(GPU_Target *const window);
 
   /** Renders one frame.
    * Called each time a new frame is retreived from the camera.
@@ -25,7 +26,7 @@ public:
 
 protected:
   cv::Mat imageGray;
-  SDL_Renderer *const renderer;
+  GPU_Target *const window;
 
   /** Finds the hand and puts the hand and background masks into the provided
    * Mats.
@@ -43,10 +44,10 @@ protected:
   SDL_Surface *createRGBASurface(cv::Mat &frame) const;
 
   /** Creates an RGB texture for the given OpenCV Mat. */
-  SDL_Texture *createRGBTexture(cv::Mat &frame);
+  //SDL_Texture *createRGBTexture(cv::Mat &frame);
 
   /** Creates an RGBA texture for the given OpenCV Mat. */
-  SDL_Texture *createRGBATexture(cv::Mat &frame);
+  //SDL_Texture *createRGBATexture(cv::Mat &frame);
 
   static const int IMAGE_WIDTH = 320;
   static const int IMAGE_HEIGHT = 240;

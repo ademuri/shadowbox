@@ -5,6 +5,8 @@
 #include <SFML/Window.hpp>
 #include <cv.h>
 
+enum RgbSplitMode { RGB_SPLIT_FIXED, RGB_SPLIT_CENTER_OF_MASS };
+
 /** Effect that "splits" the red, green, and blue channels of the shadow of the
  * hand (by moving them slightly out of alignment with each other).
  */
@@ -14,10 +16,16 @@ public:
 
   void render(cv::Mat &frame) override;
 
+  void setMode(RgbSplitMode mode);
+
 private:
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat output;
+
+  long prevXCenter = 0;
+  long prevYCenter = 0;
+  RgbSplitMode mode;
 };
 
 #endif

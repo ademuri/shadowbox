@@ -50,7 +50,8 @@ int displaySdl() {
 
   Mat image;
 
-  Effect *const effect = new RgbSplit(&window);
+  RgbSplit *const effect = new RgbSplit(&window);
+  effect->setMode(RGB_SPLIT_CENTER_OF_MASS);
 
   while (window.isOpen()) {
     sf::Event event;

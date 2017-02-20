@@ -8,18 +8,15 @@
 
 using namespace cv;
 
-FlickerShadow::FlickerShadow(SDL_Renderer *const renderer) : Effect(renderer) {
+FlickerShadow::FlickerShadow(sf::RenderWindow *const window) : Effect(window) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 
   // Create a static, solid-color background
-  background.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC3);
-  background = Scalar(0, 0, 255, 0);
+  background.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
+  background = Scalar(0, 0, 255, 255);
 
   flickerCountdown = 100;
 }
-
-// TODO: extract this into some sort of util
-extern void logSdlError(const std::string &msg);
 
 void FlickerShadow::render(cv::Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
@@ -34,31 +31,23 @@ void FlickerShadow::render(cv::Mat &frame) {
   }
   output.setTo(Scalar(0, 0, 0, 0), handMask);
 
-  // Upload foreground image to the renderer
-  SDL_Texture *tex = createRGBATexture(output);
-  if (tex == nullptr) {
-    logSdlError("SDL_CreateTextureFromSurface Error: ");
-    return;
-  }
+  sf::Image bgImage;
+  sf::Texture bgTexture;
+  sf::Sprite bgSprite;
 
-  // Upload background image to the renderer
-  SDL_Texture *backgroundTex = createRGBTexture(background);
-  if (backgroundTex == nullptr) {
-    logSdlError("SDL_CreateTextureFromSurface Error: ");
-    return;
-  }
+  sf::Image handImage;
+  sf::Texture handTexture;
+  sf::Sprite handSprite;
 
-  // First clear the renderer
-  SDL_RenderClear(renderer);
+  createSfImage(background, bgImage);
+  bgTexture.loadFromImage(bgImage);
+  bgSprite.setTexture(bgTexture);
 
-  // Draw the textures
-  SDL_RenderCopy(renderer, backgroundTex, NULL, NULL);
-  SDL_RenderCopy(renderer, tex, NULL, NULL);
+  createSfImage(output, handImage);
+  handTexture.loadFromImage(handImage);
+  handSprite.setTexture(handTexture);
 
-  // Update the screen
-  SDL_RenderPresent(renderer);
-
-  // Cleanup
-  SDL_DestroyTexture(backgroundTex);
-  SDL_DestroyTexture(tex);
+  window->draw(bgSprite);
+  window->draw(handSprite);
+  window->display();
 }

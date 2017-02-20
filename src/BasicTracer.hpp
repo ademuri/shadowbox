@@ -2,12 +2,13 @@
 #define __BASIC_TRACER_HPP__
 
 #include "Effect.hpp"
-#include <SDL2/SDL.h>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <cv.h>
 
 class BasicTracer : public Effect {
 public:
-  BasicTracer(SDL_Renderer *const renderer_);
+  BasicTracer(sf::RenderWindow *const window);
 
   void render(cv::Mat &frame) override;
 
@@ -17,7 +18,6 @@ private:
   cv::Mat handImage;
   cv::Mat accumulator;
   cv::Mat output;
-  SDL_Texture *backgroundTexture;
 };
 
 #endif

@@ -19,4 +19,30 @@ TBB (-DBUILD_TBB), but it doesn't work with the above options.
 
 TODO: switch to Release build type
 
-### SDL2
+### SFML
+
+Shadowbox uses SFML as its graphics framework. SFML is an object-oriented 2D
+graphics framework that (in our case) uses OpenGL ES. On the XU4, you'll need
+to build it yourself, since the official package comes with the mesa drivers
+for OpenGL (not ES) support. The mesa drivers (which are software only) don't
+  play nicely with the hardware-accelerated Mali drivers.
+
+You'll need to install a few packages to build SFML:
+
+```
+sudo apt-get install libvorbis-dev libflac-dev libopenal-dev libudev-dev
+```
+
+Then just grab the source from the website, configure it for OpenGL ES support,
+and build it..
+
+### Mali drivers (XU4)
+
+The Mali drivers that ship with Hardkernel's build of Ubuntu Xenial are not
+current. When I switched to the latest driver from Hardkernel's github, I saw a
+moderate performance improvement. Installing these will also fix the drivers if
+you accidentally install the Mesa drivers.
+
+Get the Mali drivers from [Hardkernel's
+github](https://github.com/mdrjr/5422_mali) and run 'sudo make install' in the
+x11 directory.

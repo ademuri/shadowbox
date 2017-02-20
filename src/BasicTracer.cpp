@@ -1,5 +1,6 @@
 #include "BasicTracer.hpp"
-#include <SDL2/SDL.h>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <cv.h>
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
@@ -8,10 +9,7 @@
 
 using namespace cv;
 
-// TODO: extract this into some sort of util
-extern void logSdlError(const std::string &msg);
-
-BasicTracer::BasicTracer(SDL_Renderer *const renderer) : Effect(renderer) {
+BasicTracer::BasicTracer(sf::RenderWindow *const window) : Effect(window) {
   handImage.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   accumulator.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
@@ -26,22 +24,14 @@ void BasicTracer::render(Mat &frame) {
   addWeighted(handImage, 1.0, accumulator, 0.9, 0, output, -1);
   output.copyTo(accumulator);
 
-  // Upload foreground image to the renderer
-  SDL_Texture *tex = createRGBATexture(output);
-  if (tex == nullptr) {
-    logSdlError("SDL_CreateTextureFromSurface Error: ");
-    return;
-  }
+  sf::Image image;
+  sf::Texture texture;
+  sf::Sprite sprite;
 
-  // First clear the renderer
-  SDL_RenderClear(renderer);
+  createSfImage(output, image);
+  texture.loadFromImage(image);
+  sprite.setTexture(texture);
 
-  // Draw the textures
-  SDL_RenderCopy(renderer, tex, NULL, NULL);
-
-  // Update the screen
-  SDL_RenderPresent(renderer);
-
-  // Cleanup
-  SDL_DestroyTexture(tex);
+  window->draw(sprite);
+  window->display();
 }

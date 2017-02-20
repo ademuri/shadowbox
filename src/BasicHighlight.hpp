@@ -2,12 +2,12 @@
 #define __BASIC_HIGHLIGHT_HPP__
 
 #include "Effect.hpp"
-#include <SDL2/SDL.h>
+#include <SFML/Window.hpp>
 #include <cv.h>
 
 class BasicHighlight : public Effect {
 public:
-  BasicHighlight(SDL_Renderer *const renderer_);
+  BasicHighlight(sf::RenderWindow *const window);
 
   void render(cv::Mat &frame) override;
 

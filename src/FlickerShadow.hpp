@@ -2,7 +2,7 @@
 #define __FLICKER_SHADOW_HPP__
 
 #include "Effect.hpp"
-#include <SDL2/SDL.h>
+#include <SFML/Window.hpp>
 #include <cv.h>
 
 /** Renderer that draws a solid background with a shadow of the hand
@@ -10,7 +10,7 @@
  */
 class FlickerShadow : public Effect {
 public:
-  FlickerShadow(SDL_Renderer *const renderer_);
+  FlickerShadow(sf::RenderWindow *const window);
 
   void render(cv::Mat &frame) override;
 

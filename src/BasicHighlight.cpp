@@ -1,5 +1,5 @@
 #include "BasicHighlight.hpp"
-#include <SDL2/SDL.h>
+#include <SFML/Window.hpp>
 #include <cv.h>
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
@@ -8,8 +8,8 @@
 
 using namespace cv;
 
-BasicHighlight::BasicHighlight(SDL_Renderer *const renderer)
-    : Effect(renderer) {
+BasicHighlight::BasicHighlight(sf::RenderWindow *const window)
+    : Effect(window) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 }
 
@@ -22,31 +22,26 @@ void BasicHighlight::render(cv::Mat &frame) {
   output.setTo(Scalar(255, 0, 0, 255), backMask);
   output.setTo(Scalar(0, 0, 0, 0), handMask);
 
-  // Upload foreground image to the renderer
-  SDL_Texture *tex = createRGBATexture(output);
-  if (tex == nullptr) {
-    logSdlError("SDL_CreateTextureFromSurface Error: ");
-    return;
-  }
+  Mat frameRGBA;
+  sf::Image bgImage;
+  sf::Texture bgTexture;
+  sf::Sprite bgSprite;
 
-  // Upload background image to the renderer
-  SDL_Texture *backgroundTex = createRGBTexture(frame);
-  if (backgroundTex == nullptr) {
-    logSdlError("SDL_CreateTextureFromSurface Error: ");
-    return;
-  }
+  sf::Image handImage;
+  sf::Texture handTexture;
+  sf::Sprite handSprite;
 
-  // First clear the renderer
-  SDL_RenderClear(renderer);
+  cv::cvtColor(frame, frameRGBA, cv::COLOR_BGR2RGBA);
+  createSfImage(frameRGBA, bgImage);
+  bgTexture.loadFromImage(bgImage);
+  bgSprite.setTexture(bgTexture);
 
-  // Draw the textures
-  SDL_RenderCopy(renderer, backgroundTex, NULL, NULL);
-  SDL_RenderCopy(renderer, tex, NULL, NULL);
+  createSfImage(output, handImage);
+  // TODO: error checking (throughout)
+  handTexture.loadFromImage(handImage);
+  handSprite.setTexture(handTexture);
 
-  // Update the screen
-  SDL_RenderPresent(renderer);
-
-  // Cleanup
-  SDL_DestroyTexture(backgroundTex);
-  SDL_DestroyTexture(tex);
+  window->draw(bgSprite);
+  window->draw(handSprite);
+  window->display();
 }

@@ -1,7 +1,8 @@
 #ifndef __EFFECT_HPP__
 #define __EFFECT_HPP__
 
-#include <SDL2/SDL.h>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <cv.h>
 
 /** A renderer that takes an image and outputs to the display.
@@ -10,7 +11,7 @@
  */
 class Effect {
 public:
-  Effect(SDL_Renderer *const renderer_);
+  Effect(sf::RenderWindow *const window);
 
   /** Renders one frame.
    * Called each time a new frame is retreived from the camera.
@@ -25,37 +26,22 @@ public:
 
 protected:
   cv::Mat imageGray;
-  SDL_Renderer *const renderer;
+  sf::Clock clock;
+  sf::RenderWindow *const window;
 
   /** Finds the hand and puts the hand and background masks into the provided
    * Mats.
    */
   void findHand(const cv::Mat frame, cv::Mat &handMask, cv::Mat &backMask);
 
-  /** Creates an RGB SDL surface for the given OpenCV Mat.
-   * Uses the BGR pixel ordering.
-   */
-  SDL_Surface *createRGBSurface(cv::Mat &frame) const;
-
-  /** Creates an RGBA SDL surface for the given OpenCV Mat.
-   * Uses the RGBA pixel ordering.
-   */
-  SDL_Surface *createRGBASurface(cv::Mat &frame) const;
-
-  /** Creates an RGB texture for the given OpenCV Mat. */
-  SDL_Texture *createRGBTexture(cv::Mat &frame);
-
-  /** Creates an RGBA texture for the given OpenCV Mat. */
-  SDL_Texture *createRGBATexture(cv::Mat &frame);
+  /** Converts the given Mat to an SFML image. */
+  void createSfImage(cv::Mat frame, sf::Image &image);
 
   static const int IMAGE_WIDTH = 320;
   static const int IMAGE_HEIGHT = 240;
 
 private:
-  // The time at which to calculate the framerate, as given by SDL_GetTicks
-  Uint32 calcFramerateAt;
-
-  // The number of frames since lastFramerateAt
+  // The number of frames in the past second
   int frames;
 };
 

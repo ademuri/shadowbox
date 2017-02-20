@@ -1,6 +1,6 @@
 #include "BasicTracer.hpp"
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <cv.h>
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>

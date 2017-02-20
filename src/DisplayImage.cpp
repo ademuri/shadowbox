@@ -2,8 +2,8 @@
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <ctime>
 #include <cv.h>
 #include <iostream>
@@ -46,13 +46,8 @@ int displaySdl() {
     }*/
 
   sf::RenderWindow window(sf::VideoMode(320, 240), "My window");
-  window.setVerticalSyncEnabled(false);
 
   Mat image;
-  Mat frameRGBA;
-  sf::Image sfImage;
-  sf::Texture texture;
-  sf::Sprite sprite;
 
   Effect *const effect = new BasicTracer(&window);
 
@@ -60,19 +55,19 @@ int displaySdl() {
     sf::Event event;
     while (window.pollEvent(event)) {
       switch (event.type) {
-        case sf::Event::Closed:
+      case sf::Event::Closed:
+        window.close();
+        break;
+
+      case sf::Event::KeyPressed:
+        if (event.key.code == sf::Keyboard::Escape) {
           window.close();
-          break;
+        }
+        break;
 
-        case sf::Event::KeyPressed:
-          if (event.key.code == sf::Keyboard::Escape) {
-            window.close();
-          }
-          break;
-
-        default:
-          // No-op
-          break;
+      default:
+        // No-op
+        break;
       }
     }
 

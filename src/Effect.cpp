@@ -1,13 +1,11 @@
 #include "Effect.hpp"
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <cv.h>
 #include <iostream>
 #include <opencv2/imgproc/imgproc.hpp>
 
-Effect::Effect(sf::RenderWindow *const window) : window(window) {
-  frames = 0;
-}
+Effect::Effect(sf::RenderWindow *const window) : window(window) { frames = 0; }
 
 void Effect::findHand(const cv::Mat frame, cv::Mat &handMask,
                       cv::Mat &backMask) {

@@ -2,8 +2,8 @@
 #define __BASIC_TRACER_HPP__
 
 #include "Effect.hpp"
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <cv.h>
 
 class BasicTracer : public Effect {

@@ -1,8 +1,8 @@
 #ifndef __EFFECT_HPP__
 #define __EFFECT_HPP__
 
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <cv.h>
 
 /** A renderer that takes an image and outputs to the display.

@@ -27,4 +27,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 find_package(SFML REQUIRED COMPONENTS graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
 
+find_package(OpenGLES3 REQUIRED)
+include_directories(${OPENGLES3_INCLUDE_DIR} ${EGL_INCLUDE_DIR})
+
 add_subdirectory(src)

@@ -1,8 +1,12 @@
+#define GL_GLEXT_PROTOTYPES
+
 #include "BasicHighlight.hpp"
 #include "BasicTracer.hpp"
+#include "Cartoon.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
 #include "RgbSplit.hpp"
+#include <GLES3/gl3.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <ctime>
@@ -46,12 +50,21 @@ int displaySdl() {
     std::cout << "Couldn't set the format" << std::endl;
     }*/
 
-  sf::RenderWindow window(sf::VideoMode(320, 240), "My window");
+  sf::RenderWindow window(sf::VideoMode(320, 240), "My window", sf::Style::Default, sf::ContextSettings(0, 0, 0, 2, 0));
+
+  sf::ContextSettings settings = window.getSettings();
+  std::cout << "Version: " << settings.majorVersion << "." << settings.minorVersion << std::endl;
+
+  std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+  std::string renderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
+  std::cout << "Vendor: " << vendor << " Renderer: " << renderer << std::endl;
+  std::cout << "GL version: " << glGetString(GL_VERSION) << std::endl;
+  std::cout << "Shading language version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+  std::cout << "Extensions: " << glGetString(GL_EXTENSIONS) << std::endl;
 
   Mat image;
 
-  RgbSplit *const effect = new RgbSplit(&window);
-  effect->setMode(RGB_SPLIT_CENTER_OF_MASS);
+  Effect *const effect = new Cartoon(&window);
 
   while (window.isOpen()) {
     sf::Event event;

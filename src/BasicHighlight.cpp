@@ -13,9 +13,6 @@ BasicHighlight::BasicHighlight(sf::RenderWindow *const window)
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 }
 
-// TODO: extract this into some sort of util
-extern void logSdlError(const std::string &msg);
-
 void BasicHighlight::render(cv::Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);

@@ -2,6 +2,7 @@
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
+#include "RgbSplit.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <ctime>
@@ -49,7 +50,7 @@ int displaySdl() {
 
   Mat image;
 
-  Effect *const effect = new BasicTracer(&window);
+  Effect *const effect = new RgbSplit(&window);
 
   while (window.isOpen()) {
     sf::Event event;

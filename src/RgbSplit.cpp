@@ -15,8 +15,8 @@ RgbSplit::RgbSplit(SDL_Renderer *const renderer_) : Effect(renderer_) {
 void RgbSplit::render(cv::Mat &frame) {
   // Highlight the hand in white, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
-  output.setTo(Scalar(255, 255, 255, 255), backMask);
-  output.setTo(Scalar(0, 0, 0, 0), handMask);
+  output.setTo(Scalar(255, 255, 255, 255), handMask);
+  output.setTo(Scalar(0, 0, 0, 0), backMask);
 
   SDL_Texture *handTexture;
 
@@ -26,7 +26,7 @@ void RgbSplit::render(cv::Mat &frame) {
   cv::Moments moments;
   switch (this->mode) {
   case RGB_SPLIT_CENTER_OF_MASS:
-    moments = cv::moments(backMask, true /* binaryImage */);
+    moments = cv::moments(handMask, true /* binaryImage */);
     xCenter = moments.m10 / moments.m00;
     yCenter = moments.m01 / moments.m00;
     diff = std::abs(xCenter - prevXCenter) + std::abs(yCenter - prevYCenter);

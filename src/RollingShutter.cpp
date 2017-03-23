@@ -20,8 +20,8 @@ RollingShutter::RollingShutter(SDL_Renderer *const renderer_)
 void RollingShutter::render(cv::Mat &frame) {
   // Highlight the hand in white, and make the rest of output black.
   findHand(frame, handMask, backMask);
-  output.setTo(Scalar(0, 0, 0, 255), handMask);
-  output.setTo(Scalar(255, 255, 255, 255), backMask);
+  output.setTo(Scalar(0, 0, 0, 255), backMask);
+  output.setTo(Scalar(255, 255, 255, 255), handMask);
 
   if (buffer[index] != NULL) {
     SDL_DestroyTexture(buffer[index]);

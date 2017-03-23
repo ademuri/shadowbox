@@ -27,12 +27,12 @@ void FlickerShadow::render(cv::Mat &frame) {
 
   flickerCountdown--;
   if (flickerCountdown <= 0) {
-    output.setTo(Scalar(255, 0, 0, 255), backMask);
+    output.setTo(Scalar(255, 0, 0, 255), handMask);
     flickerCountdown = (rand() % 100) + 10;
   } else {
-    output.setTo(Scalar(0, 0, 0, 255), backMask);
+    output.setTo(Scalar(0, 0, 0, 255), handMask);
   }
-  output.setTo(Scalar(0, 0, 0, 0), handMask);
+  output.setTo(Scalar(0, 0, 0, 0), backMask);
 
   // Upload foreground image to the renderer
   SDL_Texture *tex = createRGBATexture(output);

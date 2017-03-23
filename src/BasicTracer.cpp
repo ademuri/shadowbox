@@ -20,8 +20,8 @@ BasicTracer::BasicTracer(SDL_Renderer *const renderer) : Effect(renderer) {
 void BasicTracer::render(Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
-  handImage.setTo(Scalar(255, 0, 0, 255), backMask);
-  handImage.setTo(Scalar(0, 0, 0, 0), handMask);
+  handImage.setTo(Scalar(255, 0, 0, 255), handMask);
+  handImage.setTo(Scalar(0, 0, 0, 0), backMask);
 
   addWeighted(handImage, 1.0, accumulator, 0.9, 0, output, -1);
   output.copyTo(accumulator);

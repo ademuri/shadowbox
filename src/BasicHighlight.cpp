@@ -19,8 +19,8 @@ extern void logSdlError(const std::string &msg);
 void BasicHighlight::render(cv::Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
-  output.setTo(Scalar(255, 0, 0, 255), backMask);
-  output.setTo(Scalar(0, 0, 0, 0), handMask);
+  output.setTo(Scalar(255, 0, 0, 255), handMask);
+  output.setTo(Scalar(0, 0, 0, 0), backMask);
 
   // Upload foreground image to the renderer
   SDL_Texture *tex = createRGBATexture(output);

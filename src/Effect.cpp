@@ -12,8 +12,8 @@ Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
 void Effect::findHand(const cv::Mat frame, cv::Mat &handMask,
                       cv::Mat &backMask) {
   cvtColor(frame, imageGray, cv::COLOR_RGB2GRAY);
-  threshold(imageGray, backMask, 50, 255, cv::THRESH_BINARY);
-  bitwise_not(backMask, handMask);
+  threshold(imageGray, handMask, 50, 255, cv::THRESH_BINARY);
+  bitwise_not(handMask, backMask);
 }
 
 SDL_Surface *Effect::createRGBSurface(cv::Mat &frame) const {

@@ -4,6 +4,7 @@
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
+#include "HighlightEdge.hpp"
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
 #include <GLES3/gl31.h>
@@ -106,7 +107,8 @@ int displaySdl() {
 
   Mat image;
 
-  RollingShutter *const effect = new RollingShutter(ren);
+  HighlightEdge *const effect = new HighlightEdge(ren);
+  effect->setMode(HIGHLIGHT_EDGE_FILL);
 
   bool done = false;
   SDL_Event e;

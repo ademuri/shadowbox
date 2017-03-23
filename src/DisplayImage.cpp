@@ -5,6 +5,7 @@
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
 #include "RgbSplit.hpp"
+#include "RollingShutter.hpp"
 #include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
 #include <ctime>
@@ -105,8 +106,7 @@ int displaySdl() {
 
   Mat image;
 
-  RgbSplit *const effect = new RgbSplit(ren);
-  effect->setMode(RGB_SPLIT_CENTER_OF_MASS);
+  RollingShutter *const effect = new RollingShutter(ren);
 
   bool done = false;
   SDL_Event e;

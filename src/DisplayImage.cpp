@@ -4,6 +4,7 @@
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "FlickerShadow.hpp"
+#include "RgbSplit.hpp"
 #include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
 #include <ctime>
@@ -104,7 +105,8 @@ int displaySdl() {
 
   Mat image;
 
-  Effect *const effect = new BasicTracer(ren);
+  RgbSplit *const effect = new RgbSplit(ren);
+  effect->setMode(RGB_SPLIT_CENTER_OF_MASS);
 
   bool done = false;
   SDL_Event e;

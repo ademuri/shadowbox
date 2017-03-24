@@ -107,8 +107,18 @@ int displaySdl() {
 
   Mat image;
 
-  HighlightEdge *const effect = new HighlightEdge(ren);
-  effect->setMode(HIGHLIGHT_EDGE_FILL);
+  // Make an array of all of the effects, so that the user can switch between
+  // them with the left and right arrows.
+  const unsigned int NUM_EFFECTS = 6;
+  Effect *effects[NUM_EFFECTS];
+  effects[0] = new BasicHighlight(ren);
+  effects[1] = new BasicTracer(ren);
+  effects[2] = new FlickerShadow(ren);
+  effects[3] = new HighlightEdge(ren);
+  effects[4] = new RgbSplit(ren);
+  effects[5] = new RollingShutter(ren);
+
+  int effectIndex = 0;
 
   bool done = false;
   SDL_Event e;
@@ -116,9 +126,24 @@ int displaySdl() {
     while (SDL_PollEvent(&e)) {
       switch (e.type) {
       case SDL_QUIT:
-      case SDL_KEYDOWN:
       case SDL_MOUSEBUTTONDOWN:
         done = true;
+        break;
+
+      case SDL_KEYUP:
+        switch (e.key.keysym.sym) {
+        case SDLK_LEFT:
+          effectIndex = (effectIndex - 1 + NUM_EFFECTS) % NUM_EFFECTS;
+          break;
+
+        case SDLK_RIGHT:
+          effectIndex = (effectIndex + 1) % NUM_EFFECTS;
+          break;
+
+        case SDLK_ESCAPE:
+          done = true;
+          break;
+        }
         break;
       default:
         // No-op
@@ -130,8 +155,8 @@ int displaySdl() {
     }
 
     cap.read(image);
-    effect->render(image);
-    effect->calculateFramerate();
+    effects[effectIndex]->render(image);
+    effects[effectIndex]->calculateFramerate();
   }
 
   SDL_DestroyRenderer(ren);

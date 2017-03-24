@@ -15,9 +15,8 @@ private:
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat handImage;
-  cv::Mat accumulator;
-  cv::Mat output;
-  SDL_Texture *backgroundTexture;
+  SDL_Texture *accumulator;
+  SDL_Texture *staging;
 };
 
 #endif

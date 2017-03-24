@@ -105,6 +105,9 @@ int displaySdl() {
     logSdlError("Unable to disable VSync hint");
   }
 
+  std::cout << "Render target supported: " << SDL_RenderTargetSupported(ren)
+            << std::endl;
+
   Mat image;
 
   // Make an array of all of the effects, so that the user can switch between
@@ -118,7 +121,7 @@ int displaySdl() {
   effects[4] = new RgbSplit(ren);
   effects[5] = new RollingShutter(ren);
 
-  int effectIndex = 0;
+  int effectIndex = 1;
 
   bool done = false;
   SDL_Event e;

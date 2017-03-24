@@ -13,8 +13,15 @@ extern void logSdlError(const std::string &msg);
 
 BasicTracer::BasicTracer(SDL_Renderer *const renderer) : Effect(renderer) {
   handImage.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
-  accumulator.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
-  output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
+  accumulator =
+      SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+                        SDL_TEXTUREACCESS_TARGET, IMAGE_WIDTH, IMAGE_HEIGHT);
+  staging =
+      SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+                        SDL_TEXTUREACCESS_TARGET, IMAGE_WIDTH, IMAGE_HEIGHT);
+
+  SDL_SetTextureBlendMode(accumulator, SDL_BLENDMODE_BLEND);
+  SDL_SetTextureBlendMode(staging, SDL_BLENDMODE_BLEND);
 }
 
 void BasicTracer::render(Mat &frame) {
@@ -23,25 +30,32 @@ void BasicTracer::render(Mat &frame) {
   handImage.setTo(Scalar(255, 0, 0, 255), handMask);
   handImage.setTo(Scalar(0, 0, 0, 0), backMask);
 
-  addWeighted(handImage, 1.0, accumulator, 0.9, 0, output, -1);
-  output.copyTo(accumulator);
-
-  // Upload foreground image to the renderer
-  SDL_Texture *tex = createRGBATexture(output);
+  SDL_SetRenderTarget(renderer, staging);
+  SDL_RenderClear(renderer);
+  SDL_Texture *tex = createRGBATexture(handImage);
   if (tex == nullptr) {
     logSdlError("SDL_CreateTextureFromSurface Error: ");
     return;
   }
 
-  // First clear the renderer
-  SDL_RenderClear(renderer);
-
-  // Draw the textures
+  if (SDL_SetTextureAlphaMod(accumulator, 220)) {
+    logSdlError("SetTextureAlphaMod Error: ");
+  }
+  if (SDL_SetTextureAlphaMod(staging, 255)) {
+    logSdlError("SetTextureAlphaMod Error: ");
+  }
+  SDL_RenderCopy(renderer, accumulator, NULL, NULL);
   SDL_RenderCopy(renderer, tex, NULL, NULL);
 
-  // Update the screen
-  SDL_RenderPresent(renderer);
+  // Copy the output back to the accumulator
+  SDL_SetTextureAlphaMod(accumulator, 255);
+  SDL_SetRenderTarget(renderer, accumulator);
+  SDL_RenderCopy(renderer, staging, NULL, NULL);
 
-  // Cleanup
+  // Set the renderer back to the screen
+  SDL_SetRenderTarget(renderer, NULL);
+  SDL_RenderClear(renderer);
+  SDL_RenderCopy(renderer, staging, NULL, NULL);
+  SDL_RenderPresent(renderer);
   SDL_DestroyTexture(tex);
 }

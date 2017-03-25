@@ -4,6 +4,7 @@
 #include "Effect.hpp"
 #include <SDL2/SDL.h>
 #include <cv.h>
+#include <vector>
 
 enum RgbSplitMode { RGB_SPLIT_FIXED, RGB_SPLIT_CENTER_OF_MASS };
 
@@ -17,6 +18,7 @@ public:
   void render(cv::Mat &frame) override;
 
   void setMode(RgbSplitMode mode);
+  void advanceMode() override;
 
 private:
   cv::Mat handMask;
@@ -26,6 +28,8 @@ private:
   long prevXCenter = 0;
   long prevYCenter = 0;
   RgbSplitMode mode;
+  std::vector<RgbSplitMode> modes;
+  unsigned int modeIndex = 0;
 };
 
 #endif

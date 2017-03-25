@@ -121,7 +121,7 @@ int displaySdl() {
   effects[4] = new RgbSplit(ren);
   effects[5] = new RollingShutter(ren);
 
-  int effectIndex = 1;
+  int effectIndex = 4;
 
   bool done = false;
   SDL_Event e;
@@ -141,6 +141,10 @@ int displaySdl() {
 
         case SDLK_RIGHT:
           effectIndex = (effectIndex + 1) % NUM_EFFECTS;
+          break;
+
+        case SDLK_UP:
+          effects[effectIndex]->advanceMode();
           break;
 
         case SDLK_ESCAPE:

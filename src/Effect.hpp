@@ -23,6 +23,11 @@ public:
    */
   void calculateFramerate();
 
+  /** If the effect has modes (i.e. configuration with a discrete, ennumerated
+   * set of possible values), switches to the next mode.
+   */
+  virtual void advanceMode();
+
 protected:
   cv::Mat imageGray;
   SDL_Renderer *const renderer;

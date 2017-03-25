@@ -12,6 +12,8 @@ HighlightEdge::HighlightEdge(SDL_Renderer *const renderer_)
     : Effect(renderer_) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   this->mode = HIGHLIGHT_EDGE_NORMAL;
+  modes.push_back(HIGHLIGHT_EDGE_NORMAL);
+  modes.push_back(HIGHLIGHT_EDGE_FILL);
 }
 
 void HighlightEdge::render(cv::Mat &frame) {
@@ -40,3 +42,8 @@ void HighlightEdge::render(cv::Mat &frame) {
 }
 
 void HighlightEdge::setMode(HighlightEdgeMode mode) { this->mode = mode; }
+
+void HighlightEdge::advanceMode() {
+  modeIndex = (modeIndex + 1) % modes.size();
+  setMode(modes[modeIndex]);
+}

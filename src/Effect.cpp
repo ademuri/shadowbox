@@ -65,3 +65,7 @@ void Effect::calculateFramerate() {
     frames = 0;
   }
 }
+
+void Effect::advanceMode() {
+  // Default  behavior is no-op. Subclasses can override.
+}

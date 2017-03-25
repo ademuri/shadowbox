@@ -22,6 +22,7 @@ public:
   void render(cv::Mat &frame) override;
 
   void setMode(HighlightEdgeMode mode);
+  void advanceMode() override;
 
 private:
   cv::Mat handMask;
@@ -29,6 +30,8 @@ private:
   cv::Mat output;
   cv::Mat edges;
   HighlightEdgeMode mode;
+  std::vector<HighlightEdgeMode> modes;
+  unsigned int modeIndex = 0;
 };
 
 #endif

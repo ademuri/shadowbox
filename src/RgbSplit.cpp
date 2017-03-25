@@ -5,11 +5,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <vector>
 
 using namespace cv;
 
 RgbSplit::RgbSplit(SDL_Renderer *const renderer_) : Effect(renderer_) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
+  modes.push_back(RGB_SPLIT_FIXED);
+  modes.push_back(RGB_SPLIT_CENTER_OF_MASS);
 }
 
 void RgbSplit::render(cv::Mat &frame) {
@@ -68,3 +71,8 @@ void RgbSplit::render(cv::Mat &frame) {
 }
 
 void RgbSplit::setMode(RgbSplitMode mode) { this->mode = mode; }
+
+void RgbSplit::advanceMode() {
+  modeIndex = (modeIndex + 1) % modes.size();
+  setMode(modes[modeIndex]);
+}

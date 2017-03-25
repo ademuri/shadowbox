@@ -20,3 +20,13 @@ TBB (-DBUILD_TBB), but it doesn't work with the above options.
 TODO: switch to Release build type
 
 ### SDL2
+
+### git-lfs
+
+Shadowbox uses git-lfs to store video files for testing. There isn't a package
+for it on arm, so you'll need to build it yourself. First [download
+Golang](https://golang.org/dl/) and install it (as of writing, Go 1.7.3 is
+required, and only 1.6 is available in the repos). Then, follow the instructions
+[here](https://github.com/git-lfs/git-lfs/blob/master/CONTRIBUTING.md#building-git-lfs)
+to build git-lfs. Copy the binary produced into `/usr/local/bin` and run `git
+lfs install`.

@@ -123,6 +123,14 @@ int displaySdl() {
 
   int effectIndex = 4;
 
+  VideoWriter writer("out.avi", VideoWriter::fourcc('M','J','P','G'), 60, cv::Size(320, 240), true);
+  //if (writer.open("out.avi", VideoWriter::fourcc('M','J','P','G'), 60, cv::Size(320, 240), true)) {
+  if (writer.isOpened()) {
+    std::cout << "Video file opened successfully!" << std::endl;
+  } else {
+    std::cout << "Unable to open video out!" << std::endl;
+  }
+
   bool done = false;
   SDL_Event e;
   while (!done) {
@@ -162,9 +170,13 @@ int displaySdl() {
     }
 
     cap.read(image);
-    effects[effectIndex]->render(image);
-    effects[effectIndex]->calculateFramerate();
+    writer.write(image);
+
+    /*effects[effectIndex]->render(image);
+    effects[effectIndex]->calculateFramerate();*/
   }
+
+  writer.release();
 
   SDL_DestroyRenderer(ren);
   SDL_DestroyWindow(win);

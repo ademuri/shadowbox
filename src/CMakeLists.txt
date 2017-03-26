@@ -1,5 +1,5 @@
 file(GLOB Effects_SRC "*.hpp" "*.cpp")
-list(REMOVE_ITEM Effects_SRC "DisplayImage.cpp")
+list(REMOVE_ITEM Effects_SRC ${CMAKE_CURRENT_SOURCE_DIR}/DisplayImage.cpp)
 
 add_library(Effects ${Effects_SRC})
 add_executable(DisplayImage DisplayImage.cpp)

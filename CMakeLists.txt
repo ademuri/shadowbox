@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
+cmake_policy(SET CMP0028 NEW)
 project(shadowbox)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${shadowbox_SOURCE_DIR}/cmake")
@@ -34,3 +35,9 @@ find_package(OpenGLES3 REQUIRED)
 include_directories(${OPENGLES3_INCLUDE_DIR} ${EGL_INCLUDE_DIR})
 
 add_subdirectory(src)
+add_subdirectory(test)
+
+# Configure tests
+enable_testing()
+
+add_test(MyTests test/FpsTest)

@@ -87,9 +87,8 @@ int displaySdl() {
   std::cout << "Version: " << version << std::endl;
 
   // Create a renderer
-  SDL_Renderer *const ren = SDL_CreateRenderer(
-      // win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-      win, -1, SDL_RENDERER_ACCELERATED);
+  SDL_Renderer *const ren =
+      SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
   if (ren == nullptr) {
     SDL_DestroyWindow(win);
     logSdlError("SDL_CreateRenderer Error: ");
@@ -104,9 +103,6 @@ int displaySdl() {
   if (SDL_SetHint(SDL_HINT_RENDER_VSYNC, 0)) {
     logSdlError("Unable to disable VSync hint");
   }
-
-  std::cout << "Render target supported: " << SDL_RenderTargetSupported(ren)
-            << std::endl;
 
   Mat image;
 

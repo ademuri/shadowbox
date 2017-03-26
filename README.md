@@ -30,3 +30,9 @@ required, and only 1.6 is available in the repos). Then, follow the instructions
 [here](https://github.com/git-lfs/git-lfs/blob/master/CONTRIBUTING.md#building-git-lfs)
 to build git-lfs. Copy the binary produced into `/usr/local/bin` and run `git
 lfs install`.
+
+### Google Test
+
+Shadowbox uses Google Test, Google's C++ testing and mocking framework.
+Download it from [the site](https://github.com/google/googletest), build it
+with CMake, and `make install` it.

@@ -7,6 +7,7 @@
 #include "HighlightEdge.hpp"
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
+#include "ThickHighlightEdge.hpp"
 #include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
 #include <ctime>
@@ -108,7 +109,7 @@ int displaySdl() {
 
   // Make an array of all of the effects, so that the user can switch between
   // them with the left and right arrows.
-  const unsigned int NUM_EFFECTS = 6;
+  const unsigned int NUM_EFFECTS = 7;
   Effect *effects[NUM_EFFECTS];
   effects[0] = new BasicHighlight(ren);
   effects[1] = new BasicTracer(ren);
@@ -116,8 +117,9 @@ int displaySdl() {
   effects[3] = new HighlightEdge(ren);
   effects[4] = new RgbSplit(ren);
   effects[5] = new RollingShutter(ren);
+  effects[6] = new ThickHighlightEdge(ren);
 
-  int effectIndex = 4;
+  int effectIndex = 3;
 
   bool done = false;
   SDL_Event e;

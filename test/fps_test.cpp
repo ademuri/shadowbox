@@ -4,6 +4,7 @@
 #include "HighlightEdge.hpp"
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
+#include "ThickHighlightEdge.hpp"
 #include "gtest/gtest.h"
 #include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
@@ -15,7 +16,8 @@ using namespace cv;
 
 void logSdlError(const std::string &msg) { FAIL() << msg << SDL_GetError(); }
 
-void testFps(Effect *effect, const std::string effectName) {
+void testFps(Effect *effect, const std::string effectName,
+             unsigned int minFps = 50) {
   VideoCapture cap;
   ASSERT_TRUE(cap.open("test/assets/hand1.avi"));
 
@@ -30,7 +32,7 @@ void testFps(Effect *effect, const std::string effectName) {
   }
 
   unsigned int fps = ((double)frames) / (SDL_GetTicks() - startTicks) * 1000.0;
-  EXPECT_GE(fps, 50) << effectName;
+  EXPECT_GE(fps, minFps) << effectName;
   std::cout << effectName << " FPS: " << fps << std::endl;
 }
 
@@ -80,9 +82,9 @@ TEST(FpsTest, FpsIsHighEnough) {
 
   HighlightEdge *highlightEdge = new HighlightEdge(ren);
   highlightEdge->setMode(HIGHLIGHT_EDGE_NORMAL);
-  testFps(highlightEdge, "HighlightEdge-NORMAL");
+  testFps(highlightEdge, "HighlightEdge-NORMAL", 45);
   highlightEdge->setMode(HIGHLIGHT_EDGE_FILL);
-  testFps(highlightEdge, "HighlightEdge-FILL");
+  testFps(highlightEdge, "HighlightEdge-FILL", 45);
 
   RgbSplit *rgbSplit = new RgbSplit(ren);
   rgbSplit->setMode(RGB_SPLIT_FIXED);
@@ -92,4 +94,7 @@ TEST(FpsTest, FpsIsHighEnough) {
 
   RollingShutter *rollingShutter = new RollingShutter(ren);
   testFps(rollingShutter, "RollingShutter");
+
+  ThickHighlightEdge *thickHighlightEdge = new ThickHighlightEdge(ren);
+  testFps(thickHighlightEdge, "ThickHighlightEdge", 30);
 }

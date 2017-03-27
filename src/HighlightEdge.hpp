@@ -1,5 +1,5 @@
-#ifndef __HIGHLIGH_EDGE_HPP__
-#define __HIGHLIGH_EDGE_HPP__
+#ifndef __HIGHLIGHT_EDGE_HPP__
+#define __HIGHLIGHT_EDGE_HPP__
 
 #include "Effect.hpp"
 #include <SDL2/SDL.h>

@@ -9,15 +9,19 @@
  */
 class ThickHighlightEdge : public Effect {
 public:
-  ThickHighlightEdge(SDL_Renderer *const renderer_);
+  ThickHighlightEdge(SDL_Renderer *const renderer_, SDL_Window *const win_);
 
   void render(cv::Mat &frame) override;
 
 private:
+  SDL_Window *win;
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat output;
   cv::Mat edges;
+
+  unsigned int positionBufferId;
+  unsigned int colorBufferId;
 };
 
 #endif

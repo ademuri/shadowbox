@@ -1,4 +1,7 @@
+// Define this property so that we get the prototypes, and then inclue gl31.h
+// first so that the other includes also have the define.
 #define GL_GLEXT_PROTOTYPES 1
+#include <GLES3/gl31.h>
 
 #include "BasicHighlight.hpp"
 #include "BasicTracer.hpp"
@@ -8,7 +11,6 @@
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
 #include "ThickHighlightEdge.hpp"
-#include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
@@ -117,9 +119,9 @@ int displaySdl() {
   effects[3] = new HighlightEdge(ren);
   effects[4] = new RgbSplit(ren);
   effects[5] = new RollingShutter(ren);
-  effects[6] = new ThickHighlightEdge(ren);
+  effects[6] = new ThickHighlightEdge(ren, win);
 
-  int effectIndex = 3;
+  int effectIndex = 6;
 
   bool done = false;
   SDL_Event e;

@@ -95,6 +95,6 @@ TEST(FpsTest, FpsIsHighEnough) {
   RollingShutter *rollingShutter = new RollingShutter(ren);
   testFps(rollingShutter, "RollingShutter");
 
-  ThickHighlightEdge *thickHighlightEdge = new ThickHighlightEdge(ren);
-  testFps(thickHighlightEdge, "ThickHighlightEdge", 30);
+  ThickHighlightEdge *thickHighlightEdge = new ThickHighlightEdge(ren, win);
+  testFps(thickHighlightEdge, "ThickHighlightEdge");
 }

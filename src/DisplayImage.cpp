@@ -13,6 +13,7 @@
 #include "ThickHighlightEdge.hpp"
 #include "rendering/Renderer.hpp"
 #include <SDL2/SDL.h>
+#include <SDL_image.h>
 #include <ctime>
 #include <cv.h>
 #include <iostream>
@@ -106,6 +107,13 @@ int displaySdl() {
 
   if (SDL_SetHint(SDL_HINT_RENDER_VSYNC, 0)) {
     logSdlError("Unable to disable VSync hint");
+  }
+
+  // Initialize PNG loading
+  int imgFlags = IMG_INIT_JPG;
+  if (!(IMG_Init(imgFlags) & imgFlags)) {
+    printf("SDL_image initialize error: %s\n", IMG_GetError());
+    return 1;
   }
 
   // Initialize the shaders.

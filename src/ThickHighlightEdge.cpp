@@ -3,6 +3,7 @@
 #include "ThickHighlightEdge.hpp"
 #include "rendering/Renderer.hpp"
 #include <GLES3/gl31.h>
+#include <SDL_image.h>
 #include <algorithm>
 #include <cstdlib>
 #include <cv.h>
@@ -14,11 +15,21 @@
 using namespace cv;
 using namespace std;
 
+// TODO: extract this into some sort of util
+extern void logSdlError(const std::string &msg);
+
 ThickHighlightEdge::ThickHighlightEdge(SDL_Renderer *const renderer_,
                                        SDL_Window *const win_)
     : Effect(renderer_) {
   win = win_;
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
+
+  SDL_Surface *surface = IMG_Load("mondrian.jpg");
+  if (!surface) {
+    printf("IMG_Load error: %s\n", IMG_GetError());
+  }
+  background = SDL_CreateTextureFromSurface(renderer_, surface);
+  SDL_FreeSurface(surface);
 }
 
 void ThickHighlightEdge::render(cv::Mat &frame) {
@@ -34,6 +45,33 @@ void ThickHighlightEdge::render(cv::Mat &frame) {
   // Clear the color buffer
   glClear(GL_COLOR_BUFFER_BIT);
 
+  // Draw the textured quad
+  Renderer::useTextureShader();
+
+  vector<GlPoint> quadPoints;
+  quadPoints.push_back(GlPoint{-1, -1});
+  quadPoints.push_back(GlPoint{1, -1});
+  quadPoints.push_back(GlPoint{-1, 1});
+  quadPoints.push_back(GlPoint{1, 1});
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, quadPoints.data());
+
+  vector<GlPoint> quadTexturePoints;
+  quadTexturePoints.push_back(GlPoint{-1, -1});
+  quadTexturePoints.push_back(GlPoint{1, -1});
+  quadTexturePoints.push_back(GlPoint{-1, 1});
+  quadTexturePoints.push_back(GlPoint{1, 1});
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, quadTexturePoints.data());
+
+  if (SDL_GL_BindTexture(background, NULL, NULL)) {
+    logSdlError("Unable to bind texture: ");
+    return;
+  }
+
+  glEnableVertexAttribArray(0);
+  glEnableVertexAttribArray(1);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, quadPoints.size());
+
+  // Draw the hand outline
   Renderer::useSolidShader();
   glLineWidth(5.0);
   Renderer::setSolidShaderColor(1.0, 1.0, 1.0, 1.0);

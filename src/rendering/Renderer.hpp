@@ -23,9 +23,14 @@ public:
   // compile the shader.
   static GLuint LoadShader(GLenum type, const char *shaderSrc);
 
+  static GLuint createShaderProgram(const char *vShaderStr,
+                                    const char *fShaderStr);
+
   static void useSolidShader();
 
   static void setSolidShaderColor(float r, float g, float b, float a);
+
+  static void useTextureShader();
 
   static GlPoint pixelsToPoint(unsigned int x, unsigned int y);
 

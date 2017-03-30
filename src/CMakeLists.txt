@@ -6,5 +6,5 @@ add_subdirectory(rendering)
 
 add_library(Effects ${Effects_SRC})
 add_executable(DisplayImage DisplayImage.cpp)
-target_link_libraries(DisplayImage Effects Rendering ${SDL2_LIBRARY} ${OpenCV_LIBS} ${OPENGLES3_LIRARIES} ${EGL_LIBRARIES})
+target_link_libraries(DisplayImage Effects Rendering ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${OpenCV_LIBS} ${OPENGLES3_LIRARIES} ${EGL_LIBRARIES})
 install(TARGETS DisplayImage RUNTIME DESTINATION ${BIN_DIR})

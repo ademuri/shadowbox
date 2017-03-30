@@ -15,13 +15,11 @@ public:
 
 private:
   SDL_Window *win;
+  SDL_Texture *background;
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat output;
   cv::Mat edges;
-
-  unsigned int positionBufferId;
-  unsigned int colorBufferId;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
 #include "ThickHighlightEdge.hpp"
+#include "rendering/Renderer.hpp"
 #include "gtest/gtest.h"
 #include <GLES3/gl31.h>
 #include <SDL2/SDL.h>
@@ -54,6 +55,11 @@ TEST(FpsTest, FpsIsHighEnough) {
     logSdlError("SDL_CreateWindow Error: ");
   }
 
+  SDL_GLContext context = SDL_GL_CreateContext(win);
+  if (context == nullptr) {
+    logSdlError("SDL_GL_CreateContext: ");
+  }
+
   // Create a renderer
   SDL_Renderer *const ren =
       SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
@@ -70,6 +76,9 @@ TEST(FpsTest, FpsIsHighEnough) {
   if (SDL_SetHint(SDL_HINT_RENDER_VSYNC, 0)) {
     logSdlError("Unable to disable VSync hint");
   }
+
+  // Initialize the shaders.
+  Renderer::Init();
 
   BasicHighlight *basicHighlight = new BasicHighlight(ren);
   testFps(basicHighlight, "BasicHiglight");

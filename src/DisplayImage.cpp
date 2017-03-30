@@ -11,6 +11,7 @@
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
 #include "ThickHighlightEdge.hpp"
+#include "rendering/Renderer.hpp"
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
@@ -106,6 +107,9 @@ int displaySdl() {
   if (SDL_SetHint(SDL_HINT_RENDER_VSYNC, 0)) {
     logSdlError("Unable to disable VSync hint");
   }
+
+  // Initialize the shaders.
+  Renderer::Init();
 
   Mat image;
 

@@ -35,6 +35,9 @@ int displaySdl() {
     return 1;
   }
 
+  // Note: these properties appear to persist across power cycling the camera,
+  // so explicitly set all of the properties that we care about, just in case.
+  // Note: you can use 'v4l2ucp' to play with these values in real-time.
   if (!cap.set(CAP_PROP_FPS, 120)) {
     std::cout << "Couldn't set the FPS" << std::endl;
   }
@@ -44,13 +47,27 @@ int displaySdl() {
   if (!cap.set(CAP_PROP_FRAME_HEIGHT, 240)) {
     std::cout << "Couldn't set the height" << std::endl;
   }
+
+  // Manual exposure
   if (!cap.set(CAP_PROP_AUTO_EXPOSURE, 0.25)) {
     std::cout << "couldn't set auto exposure" << std::endl;
   }
   // NOTE: this exposure value was chosen to make the hand light and the
   // background dark
-  if (!cap.set(CAP_PROP_EXPOSURE, 0.005)) {
+  if (!cap.set(CAP_PROP_EXPOSURE, .004)) {
     std::cout << "couldn't set exposure" << std::endl;
+  }
+
+  if (!cap.set(CAP_PROP_GAIN, 0.60)) {
+    std::cout << "couldn't set gain" << std::endl;
+  }
+
+  if (!cap.set(CAP_PROP_CONTRAST, .70)) {
+    std::cout << "couldn't set contrast" << std::endl;
+  }
+
+  if (!cap.set(CAP_PROP_BRIGHTNESS, .50)) {
+    std::cout << "couldn't set brightness" << std::endl;
   }
 
   // TODO: investigate capturing directly in grayscale
@@ -125,7 +142,7 @@ int displaySdl() {
   effects[5] = new RollingShutter(ren);
   effects[6] = new ThickHighlightEdge(ren, win);
 
-  int effectIndex = 6;
+  int effectIndex = 0;
 
   bool done = false;
   SDL_Event e;

@@ -12,7 +12,7 @@ Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
 void Effect::findHand(const cv::Mat frame, cv::Mat &handMask,
                       cv::Mat &backMask) {
   cvtColor(frame, imageGray, cv::COLOR_RGB2GRAY);
-  threshold(imageGray, handMask, 50, 255, cv::THRESH_BINARY);
+  threshold(imageGray, handMask, 15, 255, cv::THRESH_BINARY);
   bitwise_not(handMask, backMask);
 }
 

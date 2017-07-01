@@ -6,6 +6,7 @@
 #include "BasicHighlight.hpp"
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
+#include "EmptyDetector.hpp"
 #include "FlickerShadow.hpp"
 #include "HighlightEdge.hpp"
 #include "RgbSplit.hpp"
@@ -21,6 +22,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
+using namespace std;
 
 void logSdlError(const std::string &msg) {
   std::cout << msg << "error: " << SDL_GetError() << std::endl;
@@ -130,6 +132,8 @@ int displaySdl() {
 
   Mat image;
 
+  EmptyDetector emptyDetector;
+
   // Make an array of all of the effects, so that the user can switch between
   // them with the left and right arrows.
   const unsigned int NUM_EFFECTS = 7;
@@ -184,6 +188,19 @@ int displaySdl() {
 
     cap.read(image);
     effects[effectIndex]->render(image);
+
+    // TODO: use a state machine and don't block for fine detection
+    if (emptyDetector.coarseEmptyDetect(image)) {
+      cout << "No foreground coarse" << endl;
+      for (unsigned int i = 0; i < 300; i++) {
+        cap.read(image);
+        if (!emptyDetector.fineEmptyDetect(image)) {
+          break;
+        }
+      }
+      cout << "No foreground fine" << endl;
+    }
+
     effects[effectIndex]->calculateFramerate();
   }
 

@@ -187,21 +187,13 @@ int displaySdl() {
     }
 
     cap.read(image);
-    effects[effectIndex]->render(image);
 
-    // TODO: use a state machine and don't block for fine detection
-    if (emptyDetector.coarseEmptyDetect(image)) {
-      cout << "No foreground coarse" << endl;
-      for (unsigned int i = 0; i < 300; i++) {
-        cap.read(image);
-        if (!emptyDetector.fineEmptyDetect(image)) {
-          break;
-        }
-      }
-      cout << "No foreground fine" << endl;
+    if (emptyDetector.compute(image)) {
+      // TODO: anything to do here?
+    } else {
+      effects[effectIndex]->render(image);
+      effects[effectIndex]->calculateFramerate();
     }
-
-    effects[effectIndex]->calculateFramerate();
   }
 
   SDL_DestroyRenderer(ren);

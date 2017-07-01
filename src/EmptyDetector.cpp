@@ -7,6 +7,12 @@ using namespace cv;
 using namespace std;
 
 EmptyDetector::EmptyDetector() {}
+EmptyDetector::EmptyDetector(unsigned int coarseRunEvery,
+                             unsigned int coarseThreshold,
+                             unsigned int fineRunEvery,
+                             unsigned int fineThreshold)
+    : coarseRunEvery(coarseRunEvery), coarseThreshold(coarseThreshold),
+      fineRunEvery(fineRunEvery), fineThreshold(fineThreshold) {}
 
 bool EmptyDetector::detect(Mat &image) {
   cvtColor(image, imageGray, cv::COLOR_RGB2GRAY);
@@ -31,7 +37,7 @@ EmptyDetectorValue EmptyDetector::periodicDetect(Mat &image,
     return ED_NOT_EMPTY;
   }
 
-  if (emptyCount > threshold) {
+  if (emptyCount >= threshold) {
     return ED_EMPTY;
   }
 

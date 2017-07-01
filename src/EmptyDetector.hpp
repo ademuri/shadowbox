@@ -13,6 +13,12 @@ public:
   EmptyDetector();
 
   /*
+   * Constructor that allows specifying the tuning constants. Used for testing.
+   */
+  EmptyDetector(unsigned int coarseRunEvery, unsigned int coarseThreshold,
+                unsigned int fineRunEvery, unsigned int fineThreshold);
+
+  /*
    * Returns true if there's no foreground. Computes the hand mask, then counts
    * the number of pixels and compares it to a threshold.
    */

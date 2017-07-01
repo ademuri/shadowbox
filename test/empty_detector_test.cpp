@@ -66,3 +66,28 @@ TEST(EmptyDetectorTest, FineRespectsRunEvery) {
   ASSERT_FALSE(detector.compute(full));
   ASSERT_TRUE(detector.compute(empty));
 }
+
+TEST(EmptyDetectorTest, RespectsPixelThreshold) {
+  Mat empty;
+  Mat partial;
+
+  empty.create(99, 99, CV_8UC3);
+  partial.create(99, 99, CV_8UC3);
+  partial = Scalar(0, 0, 0);
+
+  EmptyDetector detector = EmptyDetector(1, 1, 1, 1);
+
+  // Pixel threshold is 100 pixels
+  partial.row(0) = Scalar(255, 255, 255);
+
+  ASSERT_FALSE(detector.compute(partial));
+  for (int i = 0; i < 10; i++) {
+    ASSERT_TRUE(detector.compute(partial));
+  }
+
+  partial.row(1) = Scalar(255, 255, 255);
+
+  for (int i = 0; i < 10; i++) {
+    ASSERT_FALSE(detector.compute(partial));
+  }
+}

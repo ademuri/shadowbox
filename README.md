@@ -4,9 +4,24 @@ Shadowbox is currently being developed on an ODroid XU4 running Ubuntu.
 
 ## System config
 
+### Startup
+
 Since Shadowbox needs do graphics stuff, it needs to be run in the context of
 MATE. To do this, go to System > Preferences > Personal > Startup Applications,
 and add the shadowbox binary. You should also add the Fadecandy server here.
+
+### Drivers
+
+The graphics drivers from the Odroid Github repos are more current than the
+ones from their packages. This is also useful if you accidentally install the
+Mesa drivers. Note that these drivers will be clobbered if you update the
+mali-x11 package.
+
+```bash
+git clone https://github.com/mdrjr/5422_mali.git
+cd x11
+sudo make install
+```
 
 ## Dependencies
 

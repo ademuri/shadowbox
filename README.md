@@ -2,6 +2,12 @@
 
 Shadowbox is currently being developed on an ODroid XU4 running Ubuntu.
 
+## System config
+
+Since Shadowbox needs do graphics stuff, it needs to be run in the context of
+MATE. To do this, go to System > Preferences > Personal > Startup Applications,
+and add the shadowbox binary. You should also add the Fadecandy server here.
+
 ## Dependencies
 
 ### OpenCV 3.X
@@ -36,3 +42,20 @@ lfs install`.
 Shadowbox uses Google Test, Google's C++ testing and mocking framework.
 Download it from [the site](https://github.com/google/googletest), build it
 with CMake, and `make install` it.
+
+### Fadecandy
+
+Shadowbox uses a Fadecandy to control "projector" lights that shine from the
+camera on the underside of the screen, to create the "shadow" illusion. To set
+up the Fadecandy server"
+
+1. Clone the shadowbox repo:
+```bash
+git clone https://github.com/scanlime/fadecandy.git
+cd fadecandy
+```
+
+Now, run the server:
+```bash
+bin/fcserver-rpi
+```

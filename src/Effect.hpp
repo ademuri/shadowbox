@@ -53,8 +53,8 @@ protected:
   /** Creates an RGBA texture for the given OpenCV Mat. */
   SDL_Texture *createRGBATexture(cv::Mat &frame);
 
-  static const int IMAGE_WIDTH = 320;
-  static const int IMAGE_HEIGHT = 240;
+  static const int IMAGE_WIDTH = 240;
+  static const int IMAGE_HEIGHT = 320;
 
 private:
   // The time at which to calculate the framerate, as given by SDL_GetTicks

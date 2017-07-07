@@ -43,7 +43,7 @@ int displaySdl() {
   if (!cap.set(CAP_PROP_FPS, 120)) {
     std::cout << "Couldn't set the FPS" << std::endl;
   }
-  if (!cap.set(CAP_PROP_FRAME_WIDTH, 320)) {
+  if (!cap.set(CAP_PROP_FRAME_WIDTH, 240)) {
     std::cout << "Couldn't set the width" << std::endl;
   }
   if (!cap.set(CAP_PROP_FRAME_HEIGHT, 240)) {
@@ -90,8 +90,12 @@ int displaySdl() {
   atexit(SDL_Quit);
 
   // Make a window
+  // These coordinates are chosen to work with the following offests for the screen area of the LED screen:
+  // Start X: 18
+  // Start Y: 135
+  // (This is dependent on hardware and was determined through trial and error).
   SDL_Window *const win = SDL_CreateWindow(
-      "Hello World!", 300, 100, 320, 240, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+      "Hello World!", 50, 30, 240, 320, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
   if (win == nullptr) {
     logSdlError("SDL_CreateWindow Error: ");
     return 1;
@@ -187,6 +191,9 @@ int displaySdl() {
     }
 
     cap.read(image);
+    // The image comes in mirrored and rotated, so fix it.
+    rotate(image, image, ROTATE_90_COUNTERCLOCKWISE);
+    flip(image, image, 1);
 
     if (emptyDetector.compute(image)) {
       // TODO: anything to do here?

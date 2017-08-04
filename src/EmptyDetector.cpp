@@ -1,4 +1,5 @@
 #include "EmptyDetector.hpp"
+#include "Screen.hpp"
 #include <cv.h>
 #include <iostream>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -6,7 +7,13 @@
 using namespace cv;
 using namespace std;
 
-EmptyDetector::EmptyDetector() {}
+EmptyDetector::EmptyDetector() {
+  screen = new Screen();
+  screen->turnOn();
+}
+
+// This is only used in tests, so don't initialize the screen.
+// TODO: mock out the Screen object for test
 EmptyDetector::EmptyDetector(unsigned int coarseRunEvery,
                              unsigned int coarseThreshold,
                              unsigned int fineRunEvery,
@@ -60,6 +67,7 @@ bool EmptyDetector::compute(Mat &image) {
     if (value == ED_EMPTY) {
       cout << "Turning off display (TODO)" << endl;
       // TODO: turn off the display
+      screen->turnOff();
 
       state = ED_EMPTY_FINE;
       return true;
@@ -75,6 +83,7 @@ bool EmptyDetector::compute(Mat &image) {
     }
     state = ED_NORMAL;
     emptyCount = 0;
+    screen->turnOn();
     break;
 
   default:

@@ -1,6 +1,7 @@
 #ifndef __EMPTY_DETECTOR_HPP__
 #define __EMPTY_DETECTOR_HPP__
 
+#include "Screen.hpp"
 #include <cv.h>
 
 using namespace cv;
@@ -47,6 +48,7 @@ private:
 
   EmptyDetectorValue periodicDetect(Mat &image, unsigned int runEvery,
                                     unsigned int threshold);
+  Screen *screen;
 };
 
 #endif

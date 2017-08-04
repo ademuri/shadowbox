@@ -16,6 +16,7 @@
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
+#include <ftdi.h>
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
@@ -90,7 +91,8 @@ int displaySdl() {
   atexit(SDL_Quit);
 
   // Make a window
-  // These coordinates are chosen to work with the following offests for the screen area of the LED screen:
+  // These coordinates are chosen to work with the following offests for the
+  // screen area of the LED screen:
   // Start X: 18
   // Start Y: 135
   // (This is dependent on hardware and was determined through trial and error).

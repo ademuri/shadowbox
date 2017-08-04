@@ -34,6 +34,9 @@ include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 find_package(OpenGLES3 REQUIRED)
 include_directories(${OPENGLES3_INCLUDE_DIR} ${EGL_INCLUDE_DIR})
 
+find_package(libftdi REQUIRED)
+include_directories(${LIBFTDI_INCLUDE_DIRS})
+
 add_subdirectory(src)
 add_subdirectory(test)
 

@@ -40,6 +40,16 @@ TBB (-DBUILD_TBB), but it doesn't work with the above options.
 
 TODO: switch to Release build type
 
+### libftdi
+
+Shadowbox uses a SainSmart USB relay device to control power to the screen. This device is controlled via FTDI. It uses libftdi to interact with the relays.
+
+Unfortunately, it seems to require root to communicate with the relays. I set up a udev rule and it appeared to be correctly applied, but libftdi couldn't find the device unless running as root.
+
+```
+sudo apt-get install libftdi-dev
+```
+
 ### SDL2
 
 ### git-lfs

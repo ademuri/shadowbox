@@ -5,11 +5,21 @@
 
 class Screen {
 public:
-  Screen();
+  virtual ~Screen() {}
 
-  void turnOff();
+  virtual void turnOff() = 0;
 
-  void turnOn();
+  virtual void turnOn() = 0;
+};
+
+class ScreenImpl : public Screen {
+public:
+  ScreenImpl();
+  virtual ~ScreenImpl() {}
+
+  virtual void turnOff();
+
+  virtual void turnOn();
 
 private:
   struct ftdi_context *ftdic;

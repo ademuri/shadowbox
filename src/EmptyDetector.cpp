@@ -8,18 +8,20 @@ using namespace cv;
 using namespace std;
 
 EmptyDetector::EmptyDetector() {
-  screen = new Screen();
+  screen = new ScreenImpl();
   screen->turnOn();
 }
 
 // This is only used in tests, so don't initialize the screen.
 // TODO: mock out the Screen object for test
-EmptyDetector::EmptyDetector(unsigned int coarseRunEvery,
+EmptyDetector::EmptyDetector(Screen *screen, unsigned int coarseRunEvery,
                              unsigned int coarseThreshold,
                              unsigned int fineRunEvery,
                              unsigned int fineThreshold)
     : coarseRunEvery(coarseRunEvery), coarseThreshold(coarseThreshold),
-      fineRunEvery(fineRunEvery), fineThreshold(fineThreshold) {}
+      fineRunEvery(fineRunEvery), fineThreshold(fineThreshold), screen(screen) {
+  screen->turnOn();
+}
 
 bool EmptyDetector::detect(Mat &image) {
   cvtColor(image, imageGray, cv::COLOR_RGB2GRAY);

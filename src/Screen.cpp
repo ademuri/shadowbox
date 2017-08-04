@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <ftdi.h>
 
-Screen::Screen() {
+ScreenImpl::ScreenImpl() {
   if ((ftdic = ftdi_new()) == 0) {
     fprintf(stderr, "ftdi_new failed!\n");
   }
@@ -19,7 +19,7 @@ Screen::Screen() {
   }
 }
 
-void Screen::turnOff() {
+void ScreenImpl::turnOff() {
   unsigned char cmd = 0x00;
   int written = ftdi_write_data(ftdic, &cmd, 1);
   if (written < 0) {
@@ -27,7 +27,7 @@ void Screen::turnOff() {
   }
 }
 
-void Screen::turnOn() {
+void ScreenImpl::turnOn() {
   unsigned char cmd = 0x08;
   int written = ftdi_write_data(ftdic, &cmd, 1);
   if (written < 0) {

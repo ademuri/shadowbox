@@ -22,6 +22,8 @@
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+int thresholdFlag = 25;
+
 using namespace cv;
 using namespace std;
 
@@ -29,7 +31,8 @@ void logSdlError(const std::string &msg) {
   std::cout << msg << "error: " << SDL_GetError() << std::endl;
 }
 
-int displaySdl() {
+// Defaults: .009, .20, .80
+int displaySdl(float exposure, float gain, float contrast) {
   VideoCapture cap;
   if (cap.open(0)) {
     std::cout << "Opened the camera." << std::endl;
@@ -57,15 +60,15 @@ int displaySdl() {
   }
   // NOTE: this exposure value was chosen to make the hand light and the
   // background dark
-  if (!cap.set(CAP_PROP_EXPOSURE, .004)) {
+  if (!cap.set(CAP_PROP_EXPOSURE, exposure)) {
     std::cout << "couldn't set exposure" << std::endl;
   }
 
-  if (!cap.set(CAP_PROP_GAIN, 0.60)) {
+  if (!cap.set(CAP_PROP_GAIN, gain)) {
     std::cout << "couldn't set gain" << std::endl;
   }
 
-  if (!cap.set(CAP_PROP_CONTRAST, .70)) {
+  if (!cap.set(CAP_PROP_CONTRAST, contrast)) {
     std::cout << "couldn't set contrast" << std::endl;
   }
 
@@ -213,4 +216,14 @@ int displaySdl() {
   return 0;
 }
 
-int main(int argc, char **argv) { return displaySdl(); }
+int main(int argc, char **argv) {
+  if (argc == 1) {
+    return displaySdl(.011, .8, .7);
+  } else if (argc == 5) {
+    thresholdFlag = stof(argv[4]);
+    return displaySdl(stof(argv[1]), stof(argv[2]), stof(argv[3]));
+  } else {
+    fprintf(stderr, "usage: %s <exposure> <gain> <contrast> <threshold>\n",
+            argv[0]);
+  }
+}

@@ -4,6 +4,9 @@
 #include <iostream>
 #include <opencv2/imgproc/imgproc.hpp>
 
+// TODO: globals are bad
+extern int thresholdFlag;
+
 Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
   calcFramerateAt = SDL_GetTicks() + 1000;
   frames = 0;
@@ -12,7 +15,7 @@ Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
 void Effect::findHand(const cv::Mat frame, cv::Mat &handMask,
                       cv::Mat &backMask) {
   cvtColor(frame, imageGray, cv::COLOR_RGB2GRAY);
-  threshold(imageGray, handMask, 200, 255, cv::THRESH_BINARY);
+  threshold(imageGray, handMask, thresholdFlag, 255, cv::THRESH_BINARY);
   bitwise_not(handMask, backMask);
 }
 

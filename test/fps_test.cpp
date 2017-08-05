@@ -13,6 +13,9 @@
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 
+// TODO: remove when global flag for Effect is removed
+int thresholdFlag = 7;
+
 using namespace cv;
 
 void logSdlError(const std::string &msg) { FAIL() << msg << SDL_GetError(); }

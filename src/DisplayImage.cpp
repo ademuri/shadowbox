@@ -22,6 +22,10 @@
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+// If true, parse camera params from commandline flags. If false, get the effect
+// number instead.
+const bool cameraFlags = false;
+
 int thresholdFlag = 25;
 
 using namespace cv;
@@ -32,7 +36,8 @@ void logSdlError(const std::string &msg) {
 }
 
 // Defaults: .009, .20, .80
-int displaySdl(float exposure, float gain, float contrast) {
+int displaySdl(unsigned int effectFlag, float exposure, float gain,
+               float contrast) {
   VideoCapture cap;
   if (cap.open(0)) {
     std::cout << "Opened the camera." << std::endl;
@@ -155,7 +160,12 @@ int displaySdl(float exposure, float gain, float contrast) {
   effects[5] = new RollingShutter(ren);
   effects[6] = new ThickHighlightEdge(ren, win);
 
-  int effectIndex = 0;
+  unsigned int effectIndex = effectFlag;
+  if (effectIndex >= NUM_EFFECTS) {
+    fprintf(stderr, "Effect num %d greater than number of effects (%d)\n",
+            effectIndex, NUM_EFFECTS);
+    effectIndex = 0;
+  }
 
   bool done = false;
   SDL_Event e;
@@ -217,13 +227,28 @@ int displaySdl(float exposure, float gain, float contrast) {
 }
 
 int main(int argc, char **argv) {
-  if (argc == 1) {
-    return displaySdl(.011, .8, .7);
-  } else if (argc == 5) {
-    thresholdFlag = stof(argv[4]);
-    return displaySdl(stof(argv[1]), stof(argv[2]), stof(argv[3]));
+  const unsigned int defaultEffect = 0;
+
+  if (cameraFlags) {
+    if (argc == 1) {
+      return displaySdl(defaultEffect, .011, .8, .7);
+    } else if (argc == 5) {
+      thresholdFlag = stof(argv[4]);
+      return displaySdl(defaultEffect, stof(argv[1]), stof(argv[2]),
+                        stof(argv[3]));
+    } else {
+      fprintf(stderr, "usage: %s <exposure> <gain> <contrast> <threshold>\n",
+              argv[0]);
+      return 1;
+    }
   } else {
-    fprintf(stderr, "usage: %s <exposure> <gain> <contrast> <threshold>\n",
-            argv[0]);
+    if (argc == 1) {
+      return displaySdl(defaultEffect, .011, .8, .7);
+    } else if (argc == 2) {
+      return displaySdl(stoi(argv[1]), .011, .8, .7);
+    } else {
+      fprintf(stderr, "usage: %s <effect>\n", argv[0]);
+      return 1;
+    }
   }
 }

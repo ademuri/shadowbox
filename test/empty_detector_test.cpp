@@ -6,6 +6,8 @@
 
 using namespace cv;
 
+int thresholdFlag = 25;
+
 class MockScreen : public Screen {
 public:
   MockScreen() {}

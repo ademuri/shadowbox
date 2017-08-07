@@ -7,6 +7,8 @@
 using namespace cv;
 using namespace std;
 
+extern int thresholdFlag;
+
 EmptyDetector::EmptyDetector() {
   screen = new ScreenImpl();
   screen->turnOn();
@@ -25,7 +27,7 @@ EmptyDetector::EmptyDetector(Screen *screen, unsigned int coarseRunEvery,
 
 bool EmptyDetector::detect(Mat &image) {
   cvtColor(image, imageGray, cv::COLOR_RGB2GRAY);
-  threshold(imageGray, thresh, 15, 255, cv::THRESH_BINARY);
+  threshold(imageGray, thresh, thresholdFlag, 255, cv::THRESH_BINARY);
   return countNonZero(thresh) < pixelThreshold;
 }
 

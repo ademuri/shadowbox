@@ -29,6 +29,14 @@ const bool cameraFlags = false;
 
 int thresholdFlag = 25;
 
+// Whether to change effects peroidically. Only disabled for testing.
+const bool changeEffectFlag = true;
+
+// Delay before changing effects, in seconds.
+// TODO: add some randomness
+// TODO: set this to an appropriate value
+const unsigned int changeEffectEvery = 10;
+
 using namespace cv;
 using namespace std;
 
@@ -152,6 +160,8 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
   EmptyDetector emptyDetector;
 
+  time_t changeEffectAt = time(nullptr) + changeEffectEvery;
+
   // Make an array of all of the effects, so that the user can switch between
   // them with the left and right arrows.
   const unsigned int NUM_EFFECTS = 7;
@@ -219,6 +229,12 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     } else {
       effects[effectIndex]->render(image);
       effects[effectIndex]->calculateFramerate();
+    }
+
+    if (changeEffectFlag && time(nullptr) > changeEffectAt) {
+      projector.setColor(0, 0, 0);
+      effectIndex = rand() % NUM_EFFECTS;
+      changeEffectAt = time(nullptr) + changeEffectEvery;
     }
   }
 

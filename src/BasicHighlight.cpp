@@ -21,7 +21,7 @@ extern void logSdlError(const std::string &msg);
 void BasicHighlight::render(cv::Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
-  output.setTo(Scalar(255, 0, 0, 255), handMask);
+  output.setTo(Scalar(red, green, blue, 255), handMask);
   output.setTo(Scalar(0, 0, 0, 0), backMask);
 
   // Upload foreground image to the renderer
@@ -52,5 +52,33 @@ void BasicHighlight::render(cv::Mat &frame) {
   SDL_DestroyTexture(backgroundTex);
   SDL_DestroyTexture(tex);
 
-  projector.setColor(100, 0, 0);
+  projector.setColor(red / 2, green / 2, blue / 2);
+}
+
+void BasicHighlight::randomize() {
+  // TODO: add more colors
+  switch (rand() % 3) {
+  case 0:
+    red = 255;
+    green = 0;
+    blue = 0;
+    break;
+
+  case 1:
+    red = 0;
+    green = 255;
+    blue = 0;
+    break;
+
+  case 2:
+    red = 0;
+    green = 0;
+    blue = 255;
+    break;
+
+  default:
+    red = 127;
+    green = 127;
+    blue = 127;
+  }
 }

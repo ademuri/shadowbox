@@ -31,6 +31,13 @@ public:
    */
   virtual void advanceMode();
 
+  /**
+   * Randomize the parameters (e.g. color, mode) for this effect. Called on a
+   * random effect change.
+   * TODO: should this be required for all effects?
+   */
+  virtual void randomize() {}
+
 protected:
   cv::Mat imageGray;
   SDL_Renderer *const renderer;

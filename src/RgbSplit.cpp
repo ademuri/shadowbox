@@ -81,3 +81,4 @@ void RgbSplit::advanceMode() {
   modeIndex = (modeIndex + 1) % modes.size();
   setMode(modes[modeIndex]);
 }
+void RgbSplit::randomize() { advanceMode(); }

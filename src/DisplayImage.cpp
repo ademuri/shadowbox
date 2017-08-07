@@ -164,7 +164,7 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
   // Make an array of all of the effects, so that the user can switch between
   // them with the left and right arrows.
-  const unsigned int NUM_EFFECTS = 7;
+  const unsigned int NUM_EFFECTS = 6;
   Effect *effects[NUM_EFFECTS];
   effects[0] = new BasicHighlight(ren, projector);
   effects[1] = new BasicTracer(ren);
@@ -172,7 +172,10 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   effects[3] = new HighlightEdge(ren);
   effects[4] = new RgbSplit(ren, projector);
   effects[5] = new RollingShutter(ren);
-  effects[6] = new ThickHighlightEdge(ren, win);
+
+  // TODO: fix this - it breaks other effects when switching from this one to
+  // other effects
+  // effects[6] = new ThickHighlightEdge(ren, win);
 
   unsigned int effectIndex = effectFlag;
   if (effectIndex >= NUM_EFFECTS) {
@@ -234,6 +237,7 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     if (changeEffectFlag && time(nullptr) > changeEffectAt) {
       projector.setColor(0, 0, 0);
       effectIndex = rand() % NUM_EFFECTS;
+      effects[effectIndex]->randomize();
       changeEffectAt = time(nullptr) + changeEffectEvery;
     }
   }

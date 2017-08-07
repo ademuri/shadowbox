@@ -9,7 +9,8 @@
 
 using namespace cv;
 
-RgbSplit::RgbSplit(SDL_Renderer *const renderer_) : Effect(renderer_) {
+RgbSplit::RgbSplit(SDL_Renderer *const renderer_, Projector projector)
+    : Effect(renderer_, projector) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   modes.push_back(RGB_SPLIT_FIXED);
   modes.push_back(RGB_SPLIT_CENTER_OF_MASS);
@@ -68,6 +69,10 @@ void RgbSplit::render(cv::Mat &frame) {
 
   SDL_RenderPresent(renderer);
   SDL_DestroyTexture(handTexture);
+
+  projector.setEveryNColor(3, 0, 100, 0, 0);
+  projector.setEveryNColor(3, 1, 0, 100, 0);
+  projector.setEveryNColor(3, 2, 0, 0, 100);
 }
 
 void RgbSplit::setMode(RgbSplitMode mode) { this->mode = mode; }

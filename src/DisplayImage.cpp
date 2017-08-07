@@ -160,7 +160,7 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   effects[1] = new BasicTracer(ren);
   effects[2] = new FlickerShadow(ren);
   effects[3] = new HighlightEdge(ren);
-  effects[4] = new RgbSplit(ren);
+  effects[4] = new RgbSplit(ren, projector);
   effects[5] = new RollingShutter(ren);
   effects[6] = new ThickHighlightEdge(ren, win);
 

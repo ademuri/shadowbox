@@ -86,6 +86,7 @@ TEST(FpsTest, FpsIsHighEnough) {
 
   // TODO: should we use a real projector here?
   Projector projector;
+
   BasicHighlight *basicHighlight = new BasicHighlight(ren, projector);
   testFps(basicHighlight, "BasicHiglight");
 
@@ -101,7 +102,7 @@ TEST(FpsTest, FpsIsHighEnough) {
   highlightEdge->setMode(HIGHLIGHT_EDGE_FILL);
   testFps(highlightEdge, "HighlightEdge-FILL", 45);
 
-  RgbSplit *rgbSplit = new RgbSplit(ren);
+  RgbSplit *rgbSplit = new RgbSplit(ren, projector);
   rgbSplit->setMode(RGB_SPLIT_FIXED);
   testFps(rgbSplit, "RgbSplit-FIXED");
   rgbSplit->setMode(RGB_SPLIT_CENTER_OF_MASS);

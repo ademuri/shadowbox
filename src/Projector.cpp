@@ -17,11 +17,17 @@ Projector::Projector() {
 
 void Projector::setColor(unsigned char red, unsigned char green,
                          unsigned char blue) {
+  setEveryNColor(1, 0, red, green, blue);
+}
+
+void Projector::setEveryNColor(unsigned int n, unsigned int offset,
+                               unsigned char red, unsigned char green,
+                               unsigned char blue) {
   uint8_t *dest = OPCClient::Header::view(packet).data();
-  for (int i = 0; i < numPixels; i++) {
-    *(dest++) = red;
-    *(dest++) = green;
-    *(dest++) = blue;
+  for (unsigned int i = offset; i < numPixels; i += n) {
+    dest[i * 3] = red;
+    dest[i * 3 + 1] = green;
+    dest[i * 3 + 2] = blue;
   }
 
   // Write twice because the fadecandy does automatic interpolation, so if we

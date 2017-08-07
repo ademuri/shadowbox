@@ -12,6 +12,9 @@ public:
 
   void setColor(unsigned char red, unsigned char green, unsigned char blue);
 
+  void setEveryNColor(unsigned int n, unsigned int offset, unsigned char red,
+                      unsigned char green, unsigned char blue);
+
 private:
   OPCClient fadecandy;
   std::vector<uint8_t> packet;

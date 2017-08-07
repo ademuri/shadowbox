@@ -12,6 +12,12 @@ Effect::Effect(SDL_Renderer *const renderer_) : renderer(renderer_) {
   frames = 0;
 }
 
+Effect::Effect(SDL_Renderer *const renderer_, Projector projector)
+    : renderer(renderer_), projector(projector) {
+  calcFramerateAt = SDL_GetTicks() + 1000;
+  frames = 0;
+}
+
 void Effect::findHand(const cv::Mat frame, cv::Mat &handMask,
                       cv::Mat &backMask) {
   cvtColor(frame, imageGray, cv::COLOR_RGB2GRAY);

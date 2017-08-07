@@ -2,6 +2,7 @@
 #include "BasicTracer.hpp"
 #include "FlickerShadow.hpp"
 #include "HighlightEdge.hpp"
+#include "Projector.hpp"
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
 #include "ThickHighlightEdge.hpp"
@@ -83,7 +84,9 @@ TEST(FpsTest, FpsIsHighEnough) {
   // Initialize the shaders.
   Renderer::Init();
 
-  BasicHighlight *basicHighlight = new BasicHighlight(ren);
+  // TODO: should we use a real projector here?
+  Projector projector;
+  BasicHighlight *basicHighlight = new BasicHighlight(ren, projector);
   testFps(basicHighlight, "BasicHiglight");
 
   BasicTracer *basicTracer = new BasicTracer(ren);

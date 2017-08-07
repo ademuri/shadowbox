@@ -1,4 +1,5 @@
 #include "BasicHighlight.hpp"
+#include "Projector.hpp"
 #include <SDL2/SDL.h>
 #include <cv.h>
 #include <iostream>
@@ -8,8 +9,9 @@
 
 using namespace cv;
 
-BasicHighlight::BasicHighlight(SDL_Renderer *const renderer)
-    : Effect(renderer) {
+BasicHighlight::BasicHighlight(SDL_Renderer *const renderer,
+                               Projector projector)
+    : Effect(renderer, projector) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 }
 
@@ -49,4 +51,6 @@ void BasicHighlight::render(cv::Mat &frame) {
   // Cleanup
   SDL_DestroyTexture(backgroundTex);
   SDL_DestroyTexture(tex);
+
+  projector.setColor(100, 0, 0);
 }

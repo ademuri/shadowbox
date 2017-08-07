@@ -9,6 +9,7 @@
 #include "EmptyDetector.hpp"
 #include "FlickerShadow.hpp"
 #include "HighlightEdge.hpp"
+#include "Projector.hpp"
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
 #include "ThickHighlightEdge.hpp"
@@ -144,6 +145,9 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   // Initialize the shaders.
   Renderer::Init();
 
+  Projector projector;
+  projector.setColor(0, 0, 0);
+
   Mat image;
 
   EmptyDetector emptyDetector;
@@ -152,7 +156,7 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   // them with the left and right arrows.
   const unsigned int NUM_EFFECTS = 7;
   Effect *effects[NUM_EFFECTS];
-  effects[0] = new BasicHighlight(ren);
+  effects[0] = new BasicHighlight(ren, projector);
   effects[1] = new BasicTracer(ren);
   effects[2] = new FlickerShadow(ren);
   effects[3] = new HighlightEdge(ren);

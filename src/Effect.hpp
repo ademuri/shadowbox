@@ -1,6 +1,7 @@
 #ifndef __EFFECT_HPP__
 #define __EFFECT_HPP__
 
+#include "Projector.hpp"
 #include <SDL2/SDL.h>
 #include <cv.h>
 
@@ -11,6 +12,8 @@
 class Effect {
 public:
   Effect(SDL_Renderer *const renderer_);
+
+  Effect(SDL_Renderer *const renderer_, Projector projector);
 
   /** Renders one frame.
    * Called each time a new frame is retreived from the camera.
@@ -31,6 +34,7 @@ public:
 protected:
   cv::Mat imageGray;
   SDL_Renderer *const renderer;
+  Projector projector;
 
   /** Finds the hand and puts the hand and background masks into the provided
    * Mats.

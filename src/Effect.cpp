@@ -1,4 +1,5 @@
 #include "Effect.hpp"
+#include "RgbUtil.hpp"
 #include <SDL2/SDL.h>
 #include <cv.h>
 #include <iostream>

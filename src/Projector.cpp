@@ -1,4 +1,5 @@
 #include "Projector.hpp"
+#include "RgbUtil.hpp"
 #include <cstdio>
 
 Projector::Projector() {
@@ -15,9 +16,16 @@ Projector::Projector() {
                                        frameBytes);
 }
 
+void Projector::setColor(RgbColor color) { setEveryNColor(1, 0, color); }
+
 void Projector::setColor(unsigned char red, unsigned char green,
                          unsigned char blue) {
   setEveryNColor(1, 0, red, green, blue);
+}
+
+void Projector::setEveryNColor(unsigned int n, unsigned int offset,
+                               RgbColor color) {
+  setEveryNColor(n, offset, color.r, color.g, color.b);
 }
 
 void Projector::setEveryNColor(unsigned int n, unsigned int offset,

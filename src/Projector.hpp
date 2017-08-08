@@ -1,6 +1,7 @@
 #ifndef __PROJECTOR_HPP__
 #define __PROJECTOR_HPP__
 
+#include "RgbUtil.hpp"
 #include "fadecandy/opc_client.h"
 
 /**
@@ -11,6 +12,10 @@ public:
   Projector();
 
   void setColor(unsigned char red, unsigned char green, unsigned char blue);
+
+  void setColor(RgbColor color);
+
+  void setEveryNColor(unsigned int n, unsigned int offset, RgbColor color);
 
   void setEveryNColor(unsigned int n, unsigned int offset, unsigned char red,
                       unsigned char green, unsigned char blue);

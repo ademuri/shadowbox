@@ -54,6 +54,17 @@ uint8_t ramp(uint8_t val) {
 }
 
 void Projector::animateScreenOn() {
+  setColor(0, 0, 0);
+  setColor(0, 0, 0);
+
+  setColor(255, 255, 255);
+  setColor(255, 255, 255);
+  usleep(1 * 1000 * 50);
+
+  setColor(0, 0, 0);
+  setColor(0, 0, 0);
+  usleep(1 * 1000 * 50);
+
   // Fade in from RGB -> white, and then blink twice
   for (int i = 0; i < 200; i++) {
     setEveryNColor(3, 0, i, ramp(i), ramp(i));

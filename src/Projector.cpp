@@ -1,5 +1,6 @@
 #include "Projector.hpp"
 #include "RgbUtil.hpp"
+#include <cmath>
 #include <cstdio>
 #include <unistd.h>
 
@@ -40,11 +41,6 @@ void Projector::setEveryNColor(unsigned int n, unsigned int offset,
     dest[i * 3 + 2] = blue / 2;
   }
 
-  // Write twice because the fadecandy does automatic interpolation, so if we
-  // don't, it'll slooowwwly fade to the color we specify.
-  if (!fadecandy.write(packet)) {
-    fprintf(stderr, "Fadecandy unable to write\n");
-  }
   if (!fadecandy.write(packet)) {
     fprintf(stderr, "Fadecandy unable to write\n");
   }
@@ -79,4 +75,20 @@ void Projector::animateScreenOn() {
 
   setColor(0, 0, 0);
   usleep(1 * 1000 * 50);
+}
+
+void Projector::screenOffAnimationTick() {
+  static HsvColor color = {0, 255, 255};
+  static unsigned int frameCount = 0;
+  static const unsigned int colorStep = 6;
+
+  if (frameCount % colorStep == 0) {
+    color.h++;
+  }
+
+  color.v = 25 + 229 * fabs(sin(0.005f * frameCount));
+
+  setColor(RgbUtil::toRgb(color));
+
+  frameCount++;
 }

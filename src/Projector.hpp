@@ -24,6 +24,9 @@ public:
    * initializes. Blocks for several seconds. */
   void animateScreenOn();
 
+  /** Renders one frame of the screen off animation. */
+  void screenOffAnimationTick();
+
 private:
   OPCClient fadecandy;
   std::vector<uint8_t> packet;

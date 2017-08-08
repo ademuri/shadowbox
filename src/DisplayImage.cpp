@@ -230,7 +230,7 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     flip(image, image, 1);
 
     if (emptyDetector.compute(image)) {
-      // TODO: anything to do here?
+      projector.screenOffAnimationTick();
     } else {
       effects[effectIndex]->render(image);
       effects[effectIndex]->calculateFramerate();

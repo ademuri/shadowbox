@@ -93,7 +93,14 @@ void Projector::screenOffAnimationTick() {
 
   if (flashMode) {
     color.v = (flashCount % 2 == 0) ? 255 : 0;
-    // The fadecandy interpolates between successive commands. Send two pretty quickly to make it flash "harder"
+
+    // Every so often, change the color when flashing
+    if (rand() % 100 == 0) {
+      color.h = rand() % 256;
+    }
+
+    // The fadecandy interpolates between successive commands. Send two pretty
+    // quickly to make it flash "harder"
     setColor(RgbUtil::toRgb(color));
     usleep(1000);
     setColor(RgbUtil::toRgb(color));

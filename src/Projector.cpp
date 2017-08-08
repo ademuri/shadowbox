@@ -81,14 +81,37 @@ void Projector::screenOffAnimationTick() {
   static HsvColor color = {0, 255, 255};
   static unsigned int frameCount = 0;
   static const unsigned int colorStep = 6;
+  // When this is true, we're flashing brightly (for a short period)
+  static bool flashMode = false;
+  static unsigned int flashCount = 0;
 
-  if (frameCount % colorStep == 0) {
-    color.h++;
+  // Every so often, do a flash.
+  if ((rand() % (60 * 60 * 5)) == 0) {
+    flashCount = rand() % 10 + 10;
+    flashMode = true;
   }
 
-  color.v = 25 + 229 * fabs(sin(0.005f * frameCount));
+  if (flashMode) {
+    color.v = (flashCount % 2 == 0) ? 255 : 0;
+    // The fadecandy interpolates between successive commands. Send two pretty quickly to make it flash "harder"
+    setColor(RgbUtil::toRgb(color));
+    usleep(1000);
+    setColor(RgbUtil::toRgb(color));
 
-  setColor(RgbUtil::toRgb(color));
+    flashCount--;
+    if (flashCount == 0) {
+      flashMode = false;
+    }
+    usleep(100 * 1000);
+  } else {
+    if (frameCount % colorStep == 0) {
+      color.h++;
+    }
+
+    color.v = 25 + 229 * fabs(sin(0.005f * frameCount));
+
+    setColor(RgbUtil::toRgb(color));
+  }
 
   frameCount++;
 }

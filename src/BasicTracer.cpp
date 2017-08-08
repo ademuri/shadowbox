@@ -12,7 +12,8 @@ using namespace cv;
 // TODO: extract this into some sort of util
 extern void logSdlError(const std::string &msg);
 
-BasicTracer::BasicTracer(SDL_Renderer *const renderer, Projector projector) : Effect(renderer, projector) {
+BasicTracer::BasicTracer(SDL_Renderer *const renderer, Projector projector)
+    : Effect(renderer, projector) {
   handImage.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
   accumulator =
       SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
@@ -28,7 +29,8 @@ BasicTracer::BasicTracer(SDL_Renderer *const renderer, Projector projector) : Ef
 void BasicTracer::render(Mat &frame) {
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
-  handImage.setTo(Scalar(foreground.r, foreground.g, foreground.b, 255), handMask);
+  handImage.setTo(Scalar(foreground.r, foreground.g, foreground.b, 255),
+                  handMask);
   handImage.setTo(Scalar(0, 0, 0, 0), backMask);
 
   SDL_SetRenderTarget(renderer, staging);
@@ -65,7 +67,7 @@ void BasicTracer::render(Mat &frame) {
 }
 
 void BasicTracer::randomize() {
-  foreground = RgbUtil::randomColor();  
+  foreground = RgbUtil::randomColor();
   // Random in the range of 220-254
   tracerGain = rand() % 35 + 220;
 }

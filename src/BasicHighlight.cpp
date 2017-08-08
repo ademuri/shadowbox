@@ -56,6 +56,4 @@ void BasicHighlight::render(cv::Mat &frame) {
   projector.setColor(foreground);
 }
 
-void BasicHighlight::randomize() {
-  foreground= RgbUtil::randomColor();
-}
+void BasicHighlight::randomize() { foreground = RgbUtil::randomColor(); }

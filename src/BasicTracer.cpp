@@ -39,7 +39,7 @@ void BasicTracer::render(Mat &frame) {
     return;
   }
 
-  if (SDL_SetTextureAlphaMod(accumulator, 220)) {
+  if (SDL_SetTextureAlphaMod(accumulator, tracerGain)) {
     logSdlError("SetTextureAlphaMod Error: ");
   }
   if (SDL_SetTextureAlphaMod(staging, 255)) {
@@ -66,4 +66,6 @@ void BasicTracer::render(Mat &frame) {
 
 void BasicTracer::randomize() {
   foreground = RgbUtil::randomColor();  
+  // Random in the range of 220-254
+  tracerGain = rand() % 35 + 220;
 }

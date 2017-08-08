@@ -20,6 +20,8 @@ private:
   cv::Mat handImage;
   SDL_Texture *accumulator;
   SDL_Texture *staging;
+
+  uint8_t tracerGain = 220;
 };
 
 #endif

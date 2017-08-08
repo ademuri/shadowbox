@@ -33,9 +33,10 @@ void Projector::setEveryNColor(unsigned int n, unsigned int offset,
                                unsigned char blue) {
   uint8_t *dest = OPCClient::Header::view(packet).data();
   for (unsigned int i = offset; i < numPixels; i += n) {
-    dest[i * 3] = red;
-    dest[i * 3 + 1] = green;
-    dest[i * 3 + 2] = blue;
+    // Set brightness to half - otherwise the ring is blinding
+    dest[i * 3] = red / 2;
+    dest[i * 3 + 1] = green / 2;
+    dest[i * 3 + 2] = blue / 2;
   }
 
   // Write twice because the fadecandy does automatic interpolation, so if we

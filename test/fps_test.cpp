@@ -90,7 +90,7 @@ TEST(FpsTest, FpsIsHighEnough) {
   BasicHighlight *basicHighlight = new BasicHighlight(ren, projector);
   testFps(basicHighlight, "BasicHiglight");
 
-  BasicTracer *basicTracer = new BasicTracer(ren);
+  BasicTracer *basicTracer = new BasicTracer(ren, projector);
   testFps(basicTracer, "BasicTracer");
 
   FlickerShadow *flickerShadow = new FlickerShadow(ren);

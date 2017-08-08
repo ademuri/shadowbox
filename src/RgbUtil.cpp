@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 // Lifted from https://stackoverflow.com/a/14733008
-RgbColor RgbUtil::toRgb(HsvColor hsv) {
+RgbColor RgbUtil::toRgb(const HsvColor hsv) {
   RgbColor rgb;
   unsigned char region, remainder, p, q, t;
 
@@ -56,7 +56,7 @@ RgbColor RgbUtil::toRgb(HsvColor hsv) {
   return rgb;
 }
 
-HsvColor RgbUtil::toHsv(RgbColor rgb) {
+HsvColor RgbUtil::toHsv(const RgbColor rgb) {
   HsvColor hsv;
   unsigned char rgbMin, rgbMax;
 

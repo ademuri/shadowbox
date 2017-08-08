@@ -35,7 +35,7 @@ const bool changeEffectFlag = true;
 // Delay before changing effects, in seconds.
 // TODO: add some randomness
 // TODO: set this to an appropriate value
-const unsigned int changeEffectEvery = 10;
+const unsigned int changeEffectEvery = 5;
 
 using namespace cv;
 using namespace std;
@@ -167,8 +167,9 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   // TODO: re-enable other effects
   const unsigned int NUM_EFFECTS = 1;
   Effect *effects[NUM_EFFECTS];
-  effects[0] = new BasicHighlight(ren, projector);
-  /*effects[1] = new BasicTracer(ren);
+  effects[0] = new BasicTracer(ren, projector);
+  /*effects[0] = new BasicHighlight(ren, projector);
+  effects[1] = new BasicTracer(ren);
   effects[2] = new FlickerShadow(ren);
   effects[3] = new HighlightEdge(ren);
   effects[4] = new RgbSplit(ren, projector);

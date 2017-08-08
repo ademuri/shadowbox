@@ -18,11 +18,6 @@ private:
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat output;
-
-  // RGB color for the foreground (default red)
-  uint8_t red = 255;
-  uint8_t green = 0;
-  uint8_t blue = 0;
 };
 
 #endif

@@ -64,6 +64,9 @@ protected:
   /** Creates an RGBA texture for the given OpenCV Mat. */
   SDL_Texture *createRGBATexture(cv::Mat &frame);
 
+  // RGB color for the foreground (default red)
+  RgbColor foreground = {255, 0, 0};
+
   static const int IMAGE_WIDTH = 240;
   static const int IMAGE_HEIGHT = 320;
 

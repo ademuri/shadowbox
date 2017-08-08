@@ -79,3 +79,20 @@ void Effect::calculateFramerate() {
 void Effect::advanceMode() {
   // Default  behavior is no-op. Subclasses can override.
 }
+
+void Effect::setColorStep(unsigned int newColorStep) {
+  colorStep = newColorStep;
+  if (colorStepCounter > colorStep) {
+    colorStepCounter = colorStep;
+  }
+}
+
+RgbColor Effect::getNextColor() {
+  if (colorStepCounter == 0) {
+    colorStepCounter = colorStep;
+    currentColor.h++;
+  }
+
+  colorStepCounter--;
+  return RgbUtil::toRgb(currentColor);
+}

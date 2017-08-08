@@ -64,6 +64,11 @@ protected:
   /** Creates an RGBA texture for the given OpenCV Mat. */
   SDL_Texture *createRGBATexture(cv::Mat &frame);
 
+  void setColorStep(unsigned int colorStep);
+
+  /** Returns the next color in the current color series. */
+  RgbColor getNextColor();
+
   // RGB color for the foreground (default red)
   RgbColor foreground = {255, 0, 0};
 
@@ -76,6 +81,12 @@ private:
 
   // The number of frames since lastFramerateAt
   int frames;
+
+  // Used for running through colors.
+  // Change the color every this many frames;
+  unsigned int colorStep = 2;
+  unsigned int colorStepCounter = 0;
+  HsvColor currentColor = {0, 255, 255};
 };
 
 #endif

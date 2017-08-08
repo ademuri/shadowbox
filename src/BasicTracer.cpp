@@ -27,6 +27,8 @@ BasicTracer::BasicTracer(SDL_Renderer *const renderer, Projector projector)
 }
 
 void BasicTracer::render(Mat &frame) {
+  foreground = getNextColor();
+
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
   handImage.setTo(Scalar(foreground.r, foreground.g, foreground.b, 255),
@@ -67,7 +69,11 @@ void BasicTracer::render(Mat &frame) {
 }
 
 void BasicTracer::randomize() {
-  foreground = RgbUtil::randomColor();
   // Random in the range of 220-254
   tracerGain = rand() % 35 + 220;
+
+  // Only do color-change half of the time
+  if (rand() % 2) {
+    setColorStep(rand() % 5 + 1);
+  }
 }

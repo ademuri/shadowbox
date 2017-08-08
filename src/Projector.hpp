@@ -20,6 +20,10 @@ public:
   void setEveryNColor(unsigned int n, unsigned int offset, unsigned char red,
                       unsigned char green, unsigned char blue);
 
+  /** Does an animation to indicate that the screen is "warming up" while it
+   * initializes. Blocks for several seconds. */
+  void animateScreenOn();
+
 private:
   OPCClient fadecandy;
   std::vector<uint8_t> packet;

@@ -1,6 +1,7 @@
 #include "Projector.hpp"
 #include "RgbUtil.hpp"
 #include <cstdio>
+#include <unistd.h>
 
 Projector::Projector() {
   if (!fadecandy.resolve("127.0.0.1")) {
@@ -47,4 +48,35 @@ void Projector::setEveryNColor(unsigned int n, unsigned int offset,
   if (!fadecandy.write(packet)) {
     fprintf(stderr, "Fadecandy unable to write\n");
   }
+}
+
+uint8_t ramp(uint8_t val) {
+  if (val < 100) {
+    return 0;
+  }
+  return (val - 100) * 2;
+}
+
+void Projector::animateScreenOn() {
+  // Fade in from RGB -> white, and then blink twice
+  for (int i = 0; i < 200; i++) {
+    setEveryNColor(3, 0, i, ramp(i), ramp(i));
+    setEveryNColor(3, 1, ramp(i), i, ramp(i));
+    setEveryNColor(3, 2, ramp(i), ramp(i), i);
+    usleep(1 * 1000 * 16 + 500);
+  }
+  setColor(0, 0, 0);
+  usleep(1 * 1000 * 50);
+
+  setColor(255, 255, 255);
+  usleep(1 * 1000 * 50);
+
+  setColor(0, 0, 0);
+  usleep(1 * 1000 * 50);
+
+  setColor(255, 255, 255);
+  usleep(1 * 1000 * 50);
+
+  setColor(0, 0, 0);
+  usleep(1 * 1000 * 50);
 }

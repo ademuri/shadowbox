@@ -38,9 +38,10 @@ find_package(libftdi REQUIRED)
 include_directories(${LIBFTDI_INCLUDE_DIRS})
 
 add_subdirectory(src)
-add_subdirectory(test)
 
 # Configure tests
-enable_testing()
-
-add_test(MyTests test/FpsTest)
+if (${BUILD_TESTS})
+  add_subdirectory(test)
+  enable_testing()
+  add_test(MyTests test/FpsTest)
+endif()

@@ -1,4 +1,5 @@
 #include "EmptyDetector.hpp"
+#include "Projector.hpp"
 #include "Screen.hpp"
 #include <cv.h>
 #include <iostream>
@@ -16,12 +17,14 @@ EmptyDetector::EmptyDetector() {
 
 // This is only used in tests, so don't initialize the screen.
 // TODO: mock out the Screen object for test
-EmptyDetector::EmptyDetector(Screen *screen, unsigned int coarseRunEvery,
+EmptyDetector::EmptyDetector(Screen *screen, Projector projector,
+                             unsigned int coarseRunEvery,
                              unsigned int coarseThreshold,
                              unsigned int fineRunEvery,
                              unsigned int fineThreshold)
     : coarseRunEvery(coarseRunEvery), coarseThreshold(coarseThreshold),
-      fineRunEvery(fineRunEvery), fineThreshold(fineThreshold), screen(screen) {
+      fineRunEvery(fineRunEvery), fineThreshold(fineThreshold), screen(screen),
+      projector(projector) {
   screen->turnOn();
 }
 
@@ -59,7 +62,7 @@ bool EmptyDetector::compute(Mat &image) {
   EmptyDetectorValue value;
 
   // TODO: remove this to re-enable turning off the screen
-  return false;
+  // return false;
 
   switch (state) {
   case ED_NORMAL:
@@ -72,8 +75,6 @@ bool EmptyDetector::compute(Mat &image) {
   case ED_EMPTY_COARSE:
     value = periodicDetect(image, fineRunEvery, fineThreshold);
     if (value == ED_EMPTY) {
-      cout << "Turning off display (TODO)" << endl;
-      // TODO: turn off the display
       screen->turnOff();
 
       state = ED_EMPTY_FINE;
@@ -91,6 +92,7 @@ bool EmptyDetector::compute(Mat &image) {
     state = ED_NORMAL;
     emptyCount = 0;
     screen->turnOn();
+    projector.animateScreenOn();
     break;
 
   default:

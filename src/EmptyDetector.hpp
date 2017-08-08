@@ -1,6 +1,7 @@
 #ifndef __EMPTY_DETECTOR_HPP__
 #define __EMPTY_DETECTOR_HPP__
 
+#include "Projector.hpp"
 #include "Screen.hpp"
 #include <cv.h>
 
@@ -16,9 +17,9 @@ public:
   /*
    * Constructor that allows specifying the tuning constants. Used for testing.
    */
-  EmptyDetector(Screen *screen, unsigned int coarseRunEvery,
-                unsigned int coarseThreshold, unsigned int fineRunEvery,
-                unsigned int fineThreshold);
+  EmptyDetector(Screen *screen, Projector projector,
+                unsigned int coarseRunEvery, unsigned int coarseThreshold,
+                unsigned int fineRunEvery, unsigned int fineThreshold);
 
   /*
    * Returns true if there's no foreground. Computes the hand mask, then counts
@@ -28,15 +29,24 @@ public:
 
 private:
   // Require nothing every 60 frames for 5 seconds at 60FPS.
-  const unsigned int coarseRunEvery = 60;
+  // TODO: set these to something reasonable
+  /*const unsigned int coarseRunEvery = 60;
   const unsigned int coarseThreshold = 5;
 
   // Require nothing every frame for 5s at 60FPS.
   const unsigned int fineRunEvery = 1;
-  const unsigned int fineThreshold = 300;
+  const unsigned int fineThreshold = 300;*/
+
+  const unsigned int coarseRunEvery = 10;
+  const unsigned int coarseThreshold = 2;
+
+  // Require nothing every frame for 5s at 60FPS.
+  const unsigned int fineRunEvery = 1;
+  const unsigned int fineThreshold = 2;
 
   // If there are fewer than this many pixels, consider the frame 'empty'.
-  const int pixelThreshold = 100;
+  // TODO: set this
+  const int pixelThreshold = 900;
 
   Mat imageGray;
   Mat thresh;
@@ -50,6 +60,7 @@ private:
   EmptyDetectorValue periodicDetect(Mat &image, unsigned int runEvery,
                                     unsigned int threshold);
   Screen *screen;
+  Projector projector;
 };
 
 #endif

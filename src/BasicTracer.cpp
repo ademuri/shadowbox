@@ -70,10 +70,38 @@ void BasicTracer::render(Mat &frame) {
 
 void BasicTracer::randomize() {
   // Random in the range of 220-254
+  // Note: if this is 255, the screen will never clear by itself
   tracerGain = rand() % 35 + 220;
 
   // Only do color-change half of the time
-  if (rand() % 2) {
+  switch (rand() % 4) {
+  case 0:
+    setColorStep(0);
+    break;
+
+  // Slow change
+  case 1:
+    colorChangeMode = COLOR_CHANGE_SLOW;
     setColorStep(rand() % 5 + 1);
+    break;
+
+  // Fast change
+  case 2:
+    colorChangeMode = COLOR_CHANGE_FAST;
+    setColorStep(rand() % 50 + 1);
+    break;
+
+  // Paint
+  case 3:
+    tracerGain = 255;
+    if (rand() % 2) {
+      setColorStep(rand() % 5 + 1);
+      colorChangeMode = COLOR_CHANGE_SLOW;
+
+    } else {
+      colorChangeMode = COLOR_CHANGE_FAST;
+      setColorStep(rand() % 50 + 1);
+    }
+    break;
   }
 }

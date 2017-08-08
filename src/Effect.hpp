@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <cv.h>
 
+enum ColorChangeMode { COLOR_CHANGE_SLOW = 0, COLOR_CHANGE_FAST = 1 };
+
 /** A renderer that takes an image and outputs to the display.
  * The main loop will call #render for each frame retrieved from the camera.
  * This class is responsible for writing to the provided renderer.
@@ -69,8 +71,13 @@ protected:
   /** Returns the next color in the current color series. */
   RgbColor getNextColor();
 
+  ColorChangeMode colorChangeMode = COLOR_CHANGE_SLOW;
+
   // RGB color for the foreground (default red)
   RgbColor foreground = {255, 0, 0};
+
+  // Color for the rotating color
+  HsvColor currentColor = {0, 255, 255};
 
   static const int IMAGE_WIDTH = 240;
   static const int IMAGE_HEIGHT = 320;
@@ -86,7 +93,6 @@ private:
   // Change the color every this many frames;
   unsigned int colorStep = 2;
   unsigned int colorStepCounter = 0;
-  HsvColor currentColor = {0, 255, 255};
 };
 
 #endif

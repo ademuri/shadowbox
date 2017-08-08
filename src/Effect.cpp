@@ -88,9 +88,17 @@ void Effect::setColorStep(unsigned int newColorStep) {
 }
 
 RgbColor Effect::getNextColor() {
-  if (colorStepCounter == 0) {
-    colorStepCounter = colorStep;
-    currentColor.h++;
+  switch (colorChangeMode) {
+  case COLOR_CHANGE_SLOW:
+    if (colorStepCounter == 0) {
+      colorStepCounter = colorStep;
+      currentColor.h++;
+    }
+    break;
+
+  case COLOR_CHANGE_FAST:
+    currentColor.h += colorStep;
+    break;
   }
 
   colorStepCounter--;

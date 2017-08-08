@@ -1,7 +1,8 @@
 #include "RgbUtil.hpp"
+#include <cstdlib>
 
 // Lifted from https://stackoverflow.com/a/14733008
-RgbColor RgbUtil::HsvToRgb(HsvColor hsv) {
+RgbColor RgbUtil::toRgb(HsvColor hsv) {
   RgbColor rgb;
   unsigned char region, remainder, p, q, t;
 
@@ -55,7 +56,7 @@ RgbColor RgbUtil::HsvToRgb(HsvColor hsv) {
   return rgb;
 }
 
-HsvColor RgbToHsv(RgbColor rgb) {
+HsvColor RgbUtil::toHsv(RgbColor rgb) {
   HsvColor hsv;
   unsigned char rgbMin, rgbMax;
 
@@ -85,4 +86,12 @@ HsvColor RgbToHsv(RgbColor rgb) {
     hsv.h = 171 + 43 * (rgb.r - rgb.g) / (rgbMax - rgbMin);
 
   return hsv;
+}
+
+RgbColor RgbUtil::randomColor() {
+  HsvColor color;
+  color.h = rand() % 256;
+  color.s = 255;
+  color.v = 255;
+  return toRgb(color);
 }

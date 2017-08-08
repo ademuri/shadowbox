@@ -15,8 +15,10 @@ typedef struct HsvColor {
 
 class RgbUtil {
 public:
-  static RgbColor HsvToRgb(HsvColor hsv);
-  static HsvColor RgbToHsv(RgbColor rgb);
+  static RgbColor toRgb(HsvColor hsv);
+  static HsvColor toHsv(RgbColor rgb);
+
+  static RgbColor randomColor();
 };
 
 #endif

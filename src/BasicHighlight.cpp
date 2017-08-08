@@ -1,5 +1,6 @@
 #include "BasicHighlight.hpp"
 #include "Projector.hpp"
+#include "RgbUtil.hpp"
 #include <SDL2/SDL.h>
 #include <cv.h>
 #include <iostream>
@@ -56,29 +57,9 @@ void BasicHighlight::render(cv::Mat &frame) {
 }
 
 void BasicHighlight::randomize() {
-  // TODO: add more colors
-  switch (rand() % 3) {
-  case 0:
-    red = 255;
-    green = 0;
-    blue = 0;
-    break;
 
-  case 1:
-    red = 0;
-    green = 255;
-    blue = 0;
-    break;
-
-  case 2:
-    red = 0;
-    green = 0;
-    blue = 255;
-    break;
-
-  default:
-    red = 127;
-    green = 127;
-    blue = 127;
-  }
+  RgbColor color = RgbUtil::randomColor();
+  red = color.r;
+  green = color.g;
+  blue = color.b;
 }

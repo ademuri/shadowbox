@@ -164,14 +164,15 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
   // Make an array of all of the effects, so that the user can switch between
   // them with the left and right arrows.
-  const unsigned int NUM_EFFECTS = 6;
+  // TODO: re-enable other effects
+  const unsigned int NUM_EFFECTS = 1;
   Effect *effects[NUM_EFFECTS];
   effects[0] = new BasicHighlight(ren, projector);
-  effects[1] = new BasicTracer(ren);
+  /*effects[1] = new BasicTracer(ren);
   effects[2] = new FlickerShadow(ren);
   effects[3] = new HighlightEdge(ren);
   effects[4] = new RgbSplit(ren, projector);
-  effects[5] = new RollingShutter(ren);
+  effects[5] = new RollingShutter(ren);*/
 
   // TODO: fix this - it breaks other effects when switching from this one to
   // other effects

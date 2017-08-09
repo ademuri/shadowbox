@@ -126,9 +126,17 @@ void Projector::screenOffAnimationTick() {
       color.h++;
     }
 
-    color.v = 25 + 229 * fabs(sin(0.005f * frameCount));
+    color.v = 45 + 209 * fabs(sin(0.005f * frameCount));
 
-    setColor(RgbUtil::toRgb(color));
+    // This displays four (24 / 6 = 4) "notches" that spin in the projector
+    // light.
+    int NUM_NOTCHES = 6;
+    for (int i = 0; i < NUM_NOTCHES; i++) {
+      HsvColor specificColor = color;
+      specificColor.v =
+          fmin(color.v, 255 * fabs(sin(.006f * frameCount + i * .5f)));
+      setEveryNColor(6, i, RgbUtil::toRgb(specificColor));
+    }
   }
 
   frameCount++;

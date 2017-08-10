@@ -62,7 +62,7 @@ bool EmptyDetector::compute(Mat &image) {
   EmptyDetectorValue value;
 
   // TODO: remove this to re-enable turning off the screen
-  // return false;
+  return false;
 
   switch (state) {
   case ED_NORMAL:

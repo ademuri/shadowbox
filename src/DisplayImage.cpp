@@ -44,6 +44,16 @@ void logSdlError(const std::string &msg) {
   std::cout << msg << "error: " << SDL_GetError() << std::endl;
 }
 
+/*
+ * Adds effect to  effects frequency times.
+ */
+void addEffect(vector<Effect *> *effects, unsigned int frequency,
+               Effect *effect) {
+  for (unsigned int i = 0; i < frequency; i++) {
+    effects->push_back(effect);
+  }
+}
+
 // Defaults: .009, .20, .80
 int displaySdl(unsigned int effectFlag, float exposure, float gain,
                float contrast) {
@@ -162,22 +172,23 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
   time_t changeEffectAt = time(nullptr) + changeEffectEvery;
 
-  // Make an array of all of the effects, so that the user can switch between
-  // them with the left and right arrows.
-  // TODO: re-enable other effects
-  const unsigned int NUM_EFFECTS = 1;
-  Effect *effects[NUM_EFFECTS];
-  effects[0] = new BasicTracer(ren, projector);
-  /*effects[0] = new BasicHighlight(ren, projector);
-  effects[1] = new BasicTracer(ren);
-  effects[2] = new FlickerShadow(ren);
-  effects[3] = new HighlightEdge(ren);
-  effects[4] = new RgbSplit(ren, projector);
-  effects[5] = new RollingShutter(ren);*/
+  // Adjust the probability of each effect being randomly chosen by inserting
+  // effects more than once.
+  vector<Effect *> effects;
+  addEffect(&effects, 10, new BasicHighlight(ren, projector));
+  addEffect(&effects, 10, new BasicTracer(ren, projector));
+  addEffect(&effects, 5, new RgbSplit(ren, projector));
+  addEffect(&effects, 3, new RollingShutter(ren));
 
+  const unsigned int NUM_EFFECTS = effects.size();
+
+  // TODO: clean these up and add these to the frequency map above
+  /*effects[2] = new FlickerShadow(ren);
+  effects[3] = new HighlightEdge(ren);
+  effects[5] = new RollingShutter(ren);
   // TODO: fix this - it breaks other effects when switching from this one to
   // other effects
-  // effects[6] = new ThickHighlightEdge(ren, win);
+  effects[6] = new ThickHighlightEdge(ren, win);*/
 
   unsigned int effectIndex = effectFlag;
   if (effectIndex >= NUM_EFFECTS) {

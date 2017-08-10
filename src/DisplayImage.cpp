@@ -234,13 +234,13 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     } else {
       effects[effectIndex]->render(image);
       effects[effectIndex]->calculateFramerate();
-    }
 
-    if (changeEffectFlag && time(nullptr) > changeEffectAt) {
-      projector.setColor(0, 0, 0);
-      effectIndex = rand() % NUM_EFFECTS;
-      effects[effectIndex]->randomize();
-      changeEffectAt = time(nullptr) + changeEffectEvery;
+      if (changeEffectFlag && time(nullptr) > changeEffectAt) {
+        projector.setColor(0, 0, 0);
+        effectIndex = rand() % NUM_EFFECTS;
+        effects[effectIndex]->randomize();
+        changeEffectAt = time(nullptr) + changeEffectEvery;
+      }
     }
   }
 

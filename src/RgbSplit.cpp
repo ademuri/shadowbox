@@ -70,9 +70,10 @@ void RgbSplit::render(cv::Mat &frame) {
   SDL_RenderPresent(renderer);
   SDL_DestroyTexture(handTexture);
 
-  projector.setEveryNColor(3, 0, 100, 0, 0);
-  projector.setEveryNColor(3, 1, 0, 100, 0);
-  projector.setEveryNColor(3, 2, 0, 0, 100);
+  projector.stageEveryNColor(3, 0, 100, 0, 0);
+  projector.stageEveryNColor(3, 1, 0, 100, 0);
+  projector.stageEveryNColor(3, 2, 0, 0, 100);
+  projector.show();
 }
 
 void RgbSplit::setMode(RgbSplitMode mode) { this->mode = mode; }

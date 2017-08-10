@@ -15,10 +15,13 @@ public:
 
   void setColor(RgbColor color);
 
-  void setEveryNColor(unsigned int n, unsigned int offset, RgbColor color);
+  void stageEveryNColor(unsigned int n, unsigned int offset, RgbColor color);
 
-  void setEveryNColor(unsigned int n, unsigned int offset, unsigned char red,
-                      unsigned char green, unsigned char blue);
+  void stageEveryNColor(unsigned int n, unsigned int offset, unsigned char red,
+                        unsigned char green, unsigned char blue);
+
+  // Makes all changes to stageEveryNColor visible.
+  void show();
 
   /** Does an animation to indicate that the screen is "warming up" while it
    * initializes. Blocks for several seconds. */

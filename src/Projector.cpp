@@ -18,21 +18,25 @@ Projector::Projector() {
                                        frameBytes);
 }
 
-void Projector::setColor(RgbColor color) { setEveryNColor(1, 0, color); }
+void Projector::setColor(RgbColor color) {
+  stageEveryNColor(1, 0, color);
+  show();
+}
 
 void Projector::setColor(unsigned char red, unsigned char green,
                          unsigned char blue) {
-  setEveryNColor(1, 0, red, green, blue);
+  stageEveryNColor(1, 0, red, green, blue);
+  show();
 }
 
-void Projector::setEveryNColor(unsigned int n, unsigned int offset,
-                               RgbColor color) {
-  setEveryNColor(n, offset, color.r, color.g, color.b);
+void Projector::stageEveryNColor(unsigned int n, unsigned int offset,
+                                 RgbColor color) {
+  stageEveryNColor(n, offset, color.r, color.g, color.b);
 }
 
-void Projector::setEveryNColor(unsigned int n, unsigned int offset,
-                               unsigned char red, unsigned char green,
-                               unsigned char blue) {
+void Projector::stageEveryNColor(unsigned int n, unsigned int offset,
+                                 unsigned char red, unsigned char green,
+                                 unsigned char blue) {
   uint8_t *dest = OPCClient::Header::view(packet).data();
   for (unsigned int i = offset; i < numPixels; i += n) {
     // Set brightness to half - otherwise the ring is blinding
@@ -40,7 +44,9 @@ void Projector::setEveryNColor(unsigned int n, unsigned int offset,
     dest[i * 3 + 1] = green / 2;
     dest[i * 3 + 2] = blue / 2;
   }
+}
 
+void Projector::show() {
   if (!fadecandy.write(packet)) {
     fprintf(stderr, "Fadecandy unable to write\n");
   }
@@ -67,9 +73,10 @@ void Projector::animateScreenOn() {
 
   // Fade in from RGB -> white, and then blink twice
   for (int i = 0; i < 200; i++) {
-    setEveryNColor(3, 0, i, ramp(i), ramp(i));
-    setEveryNColor(3, 1, ramp(i), i, ramp(i));
-    setEveryNColor(3, 2, ramp(i), ramp(i), i);
+    stageEveryNColor(3, 0, i, ramp(i), ramp(i));
+    stageEveryNColor(3, 1, ramp(i), i, ramp(i));
+    stageEveryNColor(3, 2, ramp(i), ramp(i), i);
+    show();
     usleep(1 * 1000 * 16 + 500);
   }
   setColor(0, 0, 0);
@@ -134,9 +141,10 @@ void Projector::screenOffAnimationTick() {
     for (int i = 0; i < NUM_NOTCHES; i++) {
       HsvColor specificColor = color;
       specificColor.v =
-          fmin(color.v, 255 * fabs(sin(.006f * frameCount + i * .5f)));
-      setEveryNColor(6, i, RgbUtil::toRgb(specificColor));
+          fmin(color.v, 20 + 244 * fabs(sin(.006f * frameCount + i * .5f)));
+      stageEveryNColor(6, i, RgbUtil::toRgb(specificColor));
     }
+    show();
   }
 
   frameCount++;

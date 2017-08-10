@@ -73,26 +73,27 @@ void BasicTracer::randomize() {
   // Note: if this is 255, the screen will never clear by itself
   tracerGain = rand() % 35 + 220;
 
-  // Only do color-change half of the time
-  switch (rand() % 4) {
+  switch (rand() % 6) {
   case 0:
+  case 1:
     setColorStep(0);
     break;
 
   // Slow change
-  case 1:
+  case 2:
+  case 3:
     colorChangeMode = COLOR_CHANGE_SLOW;
     setColorStep(rand() % 5 + 1);
     break;
 
   // Fast change
-  case 2:
+  case 4:
     colorChangeMode = COLOR_CHANGE_FAST;
     setColorStep(rand() % 50 + 1);
     break;
 
   // Paint
-  case 3:
+  case 5:
     tracerGain = 255;
     if (rand() % 2) {
       setColorStep(rand() % 5 + 1);

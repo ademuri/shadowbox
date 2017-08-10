@@ -18,7 +18,7 @@ public:
 
   void render(cv::Mat &frame) override;
 
-  void setMode(RgbSplitMode mode);
+  RgbSplit* setMode(RgbSplitMode mode);
   void advanceMode() override;
 
   void randomize() override;

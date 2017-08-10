@@ -76,7 +76,10 @@ void RgbSplit::render(cv::Mat &frame) {
   projector.show();
 }
 
-void RgbSplit::setMode(RgbSplitMode mode) { this->mode = mode; }
+RgbSplit* RgbSplit::setMode(RgbSplitMode mode) {
+  this->mode = mode;
+  return this;
+}
 
 void RgbSplit::advanceMode() {
   modeIndex = (modeIndex + 1) % modes.size();

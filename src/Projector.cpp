@@ -141,7 +141,7 @@ void Projector::screenOffAnimationTick() {
     for (int i = 0; i < NUM_NOTCHES; i++) {
       HsvColor specificColor = color;
       specificColor.v =
-          fmin(color.v, 20 + 244 * fabs(sin(.006f * frameCount + i * .5f)));
+          fmin(color.v, 20 + 244 * fabs(sin(.004f * frameCount + i * .5f)));
       stageEveryNColor(6, i, RgbUtil::toRgb(specificColor));
     }
     show();

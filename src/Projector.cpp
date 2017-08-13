@@ -4,12 +4,22 @@
 #include <cstdio>
 #include <unistd.h>
 
+// TODO: change this to false for production
+const bool PROJECTOR_DEBUG = true;
+
+void debugLog(const char *message) {
+  if (PROJECTOR_DEBUG) {
+    fprintf(stderr, message);
+  }
+}
+
 Projector::Projector() {
   if (!fadecandy.resolve("127.0.0.1")) {
-    fprintf(stderr, "Fadecandy unable to resolve\n");
+
+    debugLog("Fadecandy unable to resolve\n");
   }
   if (!fadecandy.tryConnect()) {
-    fprintf(stderr, "Fadecandy unable to connect\n");
+    debugLog("Fadecandy unable to connect\n");
   }
 
   int frameBytes = numPixels * 3;
@@ -47,8 +57,13 @@ void Projector::stageEveryNColor(unsigned int n, unsigned int offset,
 }
 
 void Projector::show() {
+  if (!fadecandy.isConnected()) {
+    if (!fadecandy.tryConnect()) {
+      debugLog("Fadecandy unable to connect\n");
+    }
+  }
   if (!fadecandy.write(packet)) {
-    fprintf(stderr, "Fadecandy unable to write\n");
+    debugLog("Fadecandy unable to write\n");
   }
 }
 

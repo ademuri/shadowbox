@@ -177,8 +177,10 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   vector<Effect *> effects;
   addEffect(&effects, 10, new BasicHighlight(ren, projector));
   addEffect(&effects, 10, new BasicTracer(ren, projector));
-  addEffect(&effects, 2, (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_FIXED));
-  addEffect(&effects, 3, (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));
+  addEffect(&effects, 2,
+            (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_FIXED));
+  addEffect(&effects, 3,
+            (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));
   addEffect(&effects, 3, new RollingShutter(ren));
 
   const unsigned int NUM_EFFECTS = effects.size();

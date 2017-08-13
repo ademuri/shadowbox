@@ -12,6 +12,7 @@
 #include "Projector.hpp"
 #include "RgbSplit.hpp"
 #include "RollingShutter.hpp"
+#include "SimpleStrobe.hpp"
 #include "ThickHighlightEdge.hpp"
 #include "rendering/Renderer.hpp"
 #include <SDL2/SDL.h>
@@ -175,13 +176,14 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   // Adjust the probability of each effect being randomly chosen by inserting
   // effects more than once.
   vector<Effect *> effects;
-  addEffect(&effects, 10, new BasicHighlight(ren, projector));
+  addEffect(&effects, 1, new SimpleStrobe(ren, projector));
+  /*addEffect(&effects, 10, new BasicHighlight(ren, projector));
   addEffect(&effects, 10, new BasicTracer(ren, projector));
   addEffect(&effects, 2,
             (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_FIXED));
   addEffect(&effects, 3,
             (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));
-  addEffect(&effects, 3, new RollingShutter(ren));
+  addEffect(&effects, 3, new RollingShutter(ren));*/
 
   const unsigned int NUM_EFFECTS = effects.size();
 

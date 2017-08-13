@@ -66,6 +66,9 @@ protected:
   /** Creates an RGBA texture for the given OpenCV Mat. */
   SDL_Texture *createRGBATexture(cv::Mat &frame);
 
+  /** Renders the frame to the screen. */
+  void renderMat(cv::Mat &frame);
+
   void setColorStep(unsigned int colorStep);
 
   /** Returns the next color in the current color series. */

@@ -64,6 +64,27 @@ SDL_Texture *Effect::createRGBATexture(cv::Mat &frame) {
   return texture;
 }
 
+void Effect::renderMat(cv::Mat &frame) {
+  SDL_Texture *tex = createRGBATexture(frame);
+  if (tex == nullptr) {
+    // TODO: make this common and re-add this
+    // logSdlError("SDL_CreateTextureFromSurface Error: ");
+    return;
+  }
+
+  // First clear the renderer
+  SDL_RenderClear(renderer);
+
+  // Draw the textures
+  SDL_RenderCopy(renderer, tex, NULL, NULL);
+
+  // Update the screen
+  SDL_RenderPresent(renderer);
+
+  // Cleanup
+  SDL_DestroyTexture(tex);
+}
+
 void Effect::calculateFramerate() {
   Uint32 ticks = SDL_GetTicks();
   frames++;

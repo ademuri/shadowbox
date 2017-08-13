@@ -12,12 +12,15 @@ public:
 
   void render(cv::Mat &frame) override;
 
-  // void randomize() override;
+  void randomize() override;
 
 private:
   cv::Mat handMask;
   cv::Mat backMask;
   cv::Mat output;
+
+  unsigned int strobeOffCount = 60;
+  unsigned int strobeOnCount = 2;
 };
 
 #endif

@@ -122,6 +122,18 @@ RgbColor Effect::getNextColor() {
     break;
   }
 
+  if (saturationStep) {
+    int next = currentColor.s + saturationStep;
+    if (next > 255) {
+      saturationStep = -saturationStep;
+      next = 255;
+    } else if (next < 0) {
+      saturationStep = -saturationStep;
+      next = 0;
+    }
+    currentColor.s = next;
+  }
+
   colorStepCounter--;
   return RgbUtil::toRgb(currentColor);
 }

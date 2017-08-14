@@ -20,6 +20,8 @@ BasicHighlight::BasicHighlight(SDL_Renderer *const renderer,
 extern void logSdlError(const std::string &msg);
 
 void BasicHighlight::render(cv::Mat &frame) {
+  foreground = getNextColor();
+
   // Highlight the hand in red, and make the rest of output transparent.
   findHand(frame, handMask, backMask);
   output.setTo(Scalar(foreground.r, foreground.g, foreground.b, 255), handMask);
@@ -56,4 +58,37 @@ void BasicHighlight::render(cv::Mat &frame) {
   projector.setColor(foreground);
 }
 
-void BasicHighlight::randomize() { foreground = RgbUtil::randomColor(); }
+void BasicHighlight::randomize() {
+  currentColor.h = rand() % 255;
+  currentColor.s = rand() % 100 + 155;
+
+  saturationStep = 0;
+
+  switch (rand() % 6) {
+  case 0:
+  case 1:
+    setColorStep(0);
+    break;
+
+  case 2:
+    colorChangeMode = COLOR_CHANGE_SLOW;
+    setColorStep(rand() % 5 + 1);
+    break;
+
+  case 3:
+    colorChangeMode = COLOR_CHANGE_FAST;
+    setColorStep(rand() % 10 + 1);
+    break;
+
+  // Change only saturation
+  case 4:
+    setColorStep(0);
+    saturationStep = rand() % 10 + 1;
+    break;
+
+  // Change color and saturation
+  case 5:
+    setColorStep(rand() % 5 + 1);
+    saturationStep = rand() % 10 + 1;
+  }
+}

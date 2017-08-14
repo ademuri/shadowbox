@@ -5,7 +5,10 @@
 #include <SDL2/SDL.h>
 #include <cv.h>
 
-enum ColorChangeMode { COLOR_CHANGE_SLOW = 0, COLOR_CHANGE_FAST = 1 };
+enum ColorChangeMode {
+  COLOR_CHANGE_SLOW = 0,
+  COLOR_CHANGE_FAST = 1,
+};
 
 /** A renderer that takes an image and outputs to the display.
  * The main loop will call #render for each frame retrieved from the camera.
@@ -81,6 +84,8 @@ protected:
 
   // Color for the rotating color
   HsvColor currentColor = {0, 255, 255};
+
+  int saturationStep = 0;
 
   static const int IMAGE_WIDTH = 240;
   static const int IMAGE_HEIGHT = 320;

@@ -28,6 +28,8 @@
 // number instead.
 const bool cameraFlags = false;
 
+const char* OUTPUT_FILENAME = "out.mkv";
+
 int thresholdFlag = 25;
 
 // Whether to change effects peroidically. Only disabled for testing.
@@ -202,6 +204,13 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     effectIndex = 0;
   }
 
+  VideoWriter writer = VideoWriter(OUTPUT_FILENAME, VideoWriter::fourcc('X','2','6','4'), 60, cv::Size(240, 320), true);
+  if (writer.isOpened()) {
+    std::cout << "Video file opened successfully!" << std::endl;
+  } else {
+    std::cout << "Unable to open video out!" << std::endl;
+  }
+
   bool done = false;
   SDL_Event e;
   while (!done) {
@@ -248,6 +257,8 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     if (emptyDetector.compute(image)) {
       projector.screenOffAnimationTick();
     } else {
+      // TODO: enable writing out video
+      //writer.write(image);
       effects[effectIndex]->render(image);
       effects[effectIndex]->calculateFramerate();
 

@@ -18,17 +18,19 @@
 #include <SDL2/SDL.h>
 #include <ctime>
 #include <cv.h>
+#include <dirent.h>
 #include <ftdi.h>
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <regex>
 
 // If true, parse camera params from commandline flags. If false, get the effect
 // number instead.
 const bool cameraFlags = false;
 
-const char* OUTPUT_FILENAME = "out.mkv";
+const char *OUTPUT_DIR = "/media/pensieve/archive/";
 
 int thresholdFlag = 25;
 
@@ -55,6 +57,38 @@ void addEffect(vector<Effect *> *effects, unsigned int frequency,
   for (unsigned int i = 0; i < frequency; i++) {
     effects->push_back(effect);
   }
+}
+
+// TODO: this is really horrible, and needs cleanup
+int getFileName(ostringstream *filenameStream) {
+  DIR *dir = opendir(OUTPUT_DIR);
+  dirent *ent;
+
+  if (dir == nullptr) {
+    fprintf(stderr, "Unable to read output dir\n");
+    return -1;
+  }
+
+  regex r("out_(\\d.*).mkv");
+  cmatch videoMatch;
+  int maxIndex = -1;
+
+  while ((ent = readdir(dir))) {
+    regex_search(ent->d_name, videoMatch, r);
+    // First match is entire regex, second is our capture group
+    if (videoMatch.size() != 2) {
+      continue;
+    }
+
+    csub_match matchedNumber = videoMatch[1];
+    int i = atoi(matchedNumber.str().c_str());
+    if (i > maxIndex) {
+      maxIndex = i;
+    }
+  }
+
+  *filenameStream << OUTPUT_DIR << "out_" << to_string(maxIndex + 1) << ".mkv";
+  return 0;
 }
 
 // Defaults: .009, .20, .80
@@ -204,11 +238,23 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     effectIndex = 0;
   }
 
-  VideoWriter writer = VideoWriter(OUTPUT_FILENAME, VideoWriter::fourcc('X','2','6','4'), 60, cv::Size(240, 320), true);
-  if (writer.isOpened()) {
-    std::cout << "Video file opened successfully!" << std::endl;
+  ostringstream filenameStream;
+  int failure = getFileName(&filenameStream);
+  VideoWriter writer;
+  if (failure) {
+    fprintf(stderr, "Failed to get output filename.\n");
   } else {
-    std::cout << "Unable to open video out!" << std::endl;
+    fprintf(stdout, "Opening output video at %s\n",
+            filenameStream.str().c_str());
+    writer = VideoWriter(filenameStream.str().c_str(),
+                         VideoWriter::fourcc('X', '2', '6', '4'), 60,
+                         cv::Size(240, 320), true);
+
+    if (writer.isOpened()) {
+      std::cout << "Video file opened successfully!" << std::endl;
+    } else {
+      std::cout << "Unable to open video out!" << std::endl;
+    }
   }
 
   bool done = false;
@@ -258,7 +304,9 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
       projector.screenOffAnimationTick();
     } else {
       // TODO: enable writing out video
-      //writer.write(image);
+      if (writer.isOpened()) {
+        writer.write(image);
+      }
       effects[effectIndex]->render(image);
       effects[effectIndex]->calculateFramerate();
 

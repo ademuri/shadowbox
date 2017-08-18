@@ -12,8 +12,8 @@ RollingShutter::RollingShutter(SDL_Renderer *const renderer_)
     : Effect(renderer_) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 
-  for (int i = 0; i < BUFFER_SIZE; i++) {
-    buffer[i] = NULL;
+  for (unsigned int i = 0; i < BUFFER_SIZE; i++) {
+    buffer[i] = nullptr;
   }
 }
 
@@ -23,7 +23,7 @@ void RollingShutter::render(cv::Mat &frame) {
   output.setTo(Scalar(0, 0, 0, 255), backMask);
   output.setTo(Scalar(255, 255, 255, 255), handMask);
 
-  if (buffer[index] != NULL) {
+  if (buffer[index] != nullptr) {
     SDL_DestroyTexture(buffer[index]);
   }
   buffer[index] = createRGBATexture(output);
@@ -48,7 +48,14 @@ void RollingShutter::renderFragment(int offset) {
 
   const unsigned int bufferIndex =
       (index + BUFFER_SIZE - FRAMES_PER_STRIPE * offset) % BUFFER_SIZE;
-  if (buffer[bufferIndex] != NULL) {
+  if (buffer[bufferIndex] != nullptr) {
     SDL_RenderCopy(renderer, buffer[bufferIndex], &rect, &rect);
+  }
+}
+
+void RollingShutter::randomize() {
+  for (unsigned int i = 0; i < BUFFER_SIZE; i++) {
+    SDL_DestroyTexture(buffer[index]);
+    buffer[i] = nullptr;
   }
 }

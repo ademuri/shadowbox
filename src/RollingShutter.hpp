@@ -25,6 +25,8 @@ private:
   unsigned int index = 0;
 
   void renderFragment(int offset);
+
+  void randomize() override;
 };
 
 #endif

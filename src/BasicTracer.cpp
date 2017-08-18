@@ -69,6 +69,12 @@ void BasicTracer::render(Mat &frame) {
 }
 
 void BasicTracer::randomize() {
+  // Clear the accumulator
+  SDL_SetRenderTarget(renderer, accumulator);
+  SDL_RenderClear(renderer);
+  // Set the renderer back to the screen
+  SDL_SetRenderTarget(renderer, NULL);
+
   // Random in the range of 220-254
   // Note: if this is 255, the screen will never clear by itself
   tracerGain = rand() % 35 + 220;

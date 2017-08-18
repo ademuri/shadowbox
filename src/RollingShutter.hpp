@@ -18,10 +18,11 @@ private:
   cv::Mat backMask;
   cv::Mat output;
 
-  static const unsigned int NUM_STRIPES = 3;
-  static const unsigned int FRAMES_PER_STRIPE = 6;
-  static const unsigned int BUFFER_SIZE = 20;
-  SDL_Texture *buffer[BUFFER_SIZE];
+  unsigned int NUM_STRIPES = 10;
+  unsigned int FRAMES_PER_STRIPE = 2;
+  unsigned int BUFFER_SIZE = NUM_STRIPES * FRAMES_PER_STRIPE + 1;
+  static const unsigned int ACTUAL_BUFFER_SIZE = 300;
+  SDL_Texture *buffer[ACTUAL_BUFFER_SIZE];
   unsigned int index = 0;
 
   void renderFragment(int offset);

@@ -12,7 +12,7 @@ RollingShutter::RollingShutter(SDL_Renderer *const renderer_)
     : Effect(renderer_) {
   output.create(IMAGE_HEIGHT, IMAGE_WIDTH, CV_8UC4);
 
-  for (unsigned int i = 0; i < BUFFER_SIZE; i++) {
+  for (unsigned int i = 0; i < ACTUAL_BUFFER_SIZE; i++) {
     buffer[i] = nullptr;
   }
 }
@@ -28,9 +28,9 @@ void RollingShutter::render(cv::Mat &frame) {
   }
   buffer[index] = createRGBATexture(output);
 
-  renderFragment(2);
-  renderFragment(1);
-  renderFragment(0);
+  for (int i = NUM_STRIPES - 1; i >= 0; i--) {
+    renderFragment(i);
+  }
 
   SDL_RenderPresent(renderer);
 
@@ -38,7 +38,7 @@ void RollingShutter::render(cv::Mat &frame) {
 }
 
 void RollingShutter::renderFragment(int offset) {
-  static const int OFFSET_HEIGHT = IMAGE_HEIGHT / NUM_STRIPES;
+  const int OFFSET_HEIGHT = IMAGE_HEIGHT / NUM_STRIPES;
 
   SDL_Rect rect;
   rect.w = IMAGE_WIDTH;
@@ -57,5 +57,23 @@ void RollingShutter::randomize() {
   for (unsigned int i = 0; i < BUFFER_SIZE; i++) {
     SDL_DestroyTexture(buffer[index]);
     buffer[i] = nullptr;
+  }
+  index = 0;
+
+  switch (rand() % 2) {
+  case 0:
+    NUM_STRIPES = rand() % 10 + 2;
+    FRAMES_PER_STRIPE = rand() % 10 + 1;
+    break;
+
+  case 1:
+    NUM_STRIPES = rand() % 50 + 10;
+    FRAMES_PER_STRIPE = rand() % 3 + 1;
+    break;
+  }
+  BUFFER_SIZE = NUM_STRIPES * FRAMES_PER_STRIPE + 1;
+  if (BUFFER_SIZE > ACTUAL_BUFFER_SIZE) {
+    fprintf(stderr, "Warning: buffer too small! (%d, %d)\n", BUFFER_SIZE,
+            ACTUAL_BUFFER_SIZE);
   }
 }

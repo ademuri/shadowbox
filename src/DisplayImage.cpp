@@ -33,7 +33,7 @@ const bool cameraFlags = false;
 
 const char *OUTPUT_DIR = "/media/pensieve/archive/";
 
-int thresholdFlag = 25;
+int thresholdFlag = 20;
 
 // Whether to change effects peroidically. Only disabled for testing.
 const bool changeEffectFlag = true;
@@ -327,10 +327,14 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
 int main(int argc, char **argv) {
   const unsigned int defaultEffect = 0;
+  const float defaultExposure = .012;
+  const float defaultGain = .8;
+  const float defaultContrast = .7;
 
   if (cameraFlags) {
     if (argc == 1) {
-      return displaySdl(defaultEffect, .011, .8, .7);
+      return displaySdl(defaultEffect, defaultExposure, defaultGain,
+                        defaultContrast);
     } else if (argc == 5) {
       thresholdFlag = stof(argv[4]);
       return displaySdl(defaultEffect, stof(argv[1]), stof(argv[2]),
@@ -342,9 +346,11 @@ int main(int argc, char **argv) {
     }
   } else {
     if (argc == 1) {
-      return displaySdl(defaultEffect, .011, .8, .7);
+      return displaySdl(defaultEffect, defaultExposure, defaultGain,
+                        defaultContrast);
     } else if (argc == 2) {
-      return displaySdl(stoi(argv[1]), .011, .8, .7);
+      return displaySdl(stoi(argv[1]), defaultExposure, defaultGain,
+                        defaultContrast);
     } else {
       fprintf(stderr, "usage: %s <effect>\n", argv[0]);
       return 1;

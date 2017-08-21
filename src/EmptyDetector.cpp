@@ -61,9 +61,6 @@ EmptyDetectorValue EmptyDetector::periodicDetect(Mat &image,
 bool EmptyDetector::compute(Mat &image) {
   EmptyDetectorValue value;
 
-  // TODO: remove this to re-enable turning off the screen
-  return false;
-
   switch (state) {
   case ED_NORMAL:
     if (periodicDetect(image, coarseRunEvery, coarseThreshold) == ED_EMPTY) {

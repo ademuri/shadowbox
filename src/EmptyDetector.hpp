@@ -28,25 +28,17 @@ public:
   bool compute(Mat &image);
 
 private:
-  // Require nothing every 60 frames for 5 seconds at 60FPS.
-  // TODO: set these to something reasonable
-  /*const unsigned int coarseRunEvery = 60;
-  const unsigned int coarseThreshold = 5;
+  // Require 1 min of every 6 seconds of coarse
+  const unsigned int coarseRunEvery = 6 * 60;
+  const unsigned int coarseThreshold = 10;
 
-  // Require nothing every frame for 5s at 60FPS.
+  // Require nothing every frame for 30s at 60FPS.
   const unsigned int fineRunEvery = 1;
-  const unsigned int fineThreshold = 300;*/
-
-  const unsigned int coarseRunEvery = 10;
-  const unsigned int coarseThreshold = 2;
-
-  // Require nothing every frame for 5s at 60FPS.
-  const unsigned int fineRunEvery = 1;
-  const unsigned int fineThreshold = 2;
+  const unsigned int fineThreshold = 30 * 60;
 
   // If there are fewer than this many pixels, consider the frame 'empty'.
   // TODO: set this
-  const int pixelThreshold = 900;
+  const int pixelThreshold = 600;
 
   Mat imageGray;
   Mat thresh;

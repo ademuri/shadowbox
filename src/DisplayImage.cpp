@@ -38,10 +38,8 @@ int thresholdFlag = 25;
 // Whether to change effects peroidically. Only disabled for testing.
 const bool changeEffectFlag = true;
 
-// Delay before changing effects, in seconds.
-// TODO: add some randomness
-// TODO: set this to an appropriate value
-const unsigned int changeEffectEvery = 10;
+const unsigned int changeEffectEvery = 30;
+const unsigned int changeEffectRand = 50;
 
 using namespace cv;
 using namespace std;
@@ -138,11 +136,6 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
     std::cout << "couldn't set brightness" << std::endl;
   }
 
-  // TODO: investigate capturing directly in grayscale
-  /*if (!cap.set(CV_CAP_PROP_FORMAT, CV_8UC1)) {
-    std::cout << "Couldn't set the format" << std::endl;
-    }*/
-
   // Init SDL
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     logSdlError("SDL_Init Error: ");
@@ -208,28 +201,26 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
   EmptyDetector emptyDetector;
 
-  time_t changeEffectAt = time(nullptr) + changeEffectEvery;
+  time_t changeEffectAt =
+      time(nullptr) + changeEffectEvery + rand() % changeEffectRand;
 
   // Adjust the probability of each effect being randomly chosen by inserting
   // effects more than once.
   vector<Effect *> effects;
-  // addEffect(&effects, 1, new BasicHighlight(ren, projector));
-  /*addEffect(&effects, 10, new BasicHighlight(ren, projector));
+  addEffect(&effects, 5, new BasicShadow(ren, projector));
+  addEffect(&effects, 10, new BasicHighlight(ren, projector));
   addEffect(&effects, 10, new BasicTracer(ren, projector));
   addEffect(&effects, 2,
             (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_FIXED));
   addEffect(&effects, 3,
-            (new RgbSplit(ren,
-  projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));*/
-  // addEffect(&effects, 3, new RollingShutter(ren));
-  addEffect(&effects, 3, new BasicShadow(ren, projector));
+            (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));
+  addEffect(&effects, 6, new RollingShutter(ren));
 
   const unsigned int NUM_EFFECTS = effects.size();
 
   // TODO: clean these up and add these to the frequency map above
   /*effects[2] = new FlickerShadow(ren);
   effects[3] = new HighlightEdge(ren);
-  effects[5] = new RollingShutter(ren);
   // TODO: fix this - it breaks other effects when switching from this one to
   // other effects
   effects[6] = new ThickHighlightEdge(ren, win);*/
@@ -305,8 +296,12 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
 
     if (emptyDetector.compute(image)) {
       projector.screenOffAnimationTick();
+
+      // Reset to basic shadow when the screen is turned off
+      effectIndex = 0;
+      // TODO: only do this on state transition screen off -> on
+      changeEffectAt = time(nullptr) + changeEffectEvery;
     } else {
-      // TODO: enable writing out video
       if (writer.isOpened()) {
         writer.write(image);
       }

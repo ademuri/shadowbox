@@ -14,6 +14,8 @@ public:
 
   void render(cv::Mat &frame) override;
 
+  void randomize() override;
+
 private:
   cv::Mat handMask;
   cv::Mat backMask;

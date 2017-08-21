@@ -4,6 +4,7 @@
 #include <GLES3/gl31.h>
 
 #include "BasicHighlight.hpp"
+#include "BasicShadow.hpp"
 #include "BasicTracer.hpp"
 #include "Effect.hpp"
 #include "EmptyDetector.hpp"
@@ -40,7 +41,7 @@ const bool changeEffectFlag = true;
 // Delay before changing effects, in seconds.
 // TODO: add some randomness
 // TODO: set this to an appropriate value
-const unsigned int changeEffectEvery = 5;
+const unsigned int changeEffectEvery = 10;
 
 using namespace cv;
 using namespace std;
@@ -213,13 +214,15 @@ int displaySdl(unsigned int effectFlag, float exposure, float gain,
   // effects more than once.
   vector<Effect *> effects;
   // addEffect(&effects, 1, new BasicHighlight(ren, projector));
-  addEffect(&effects, 10, new BasicHighlight(ren, projector));
+  /*addEffect(&effects, 10, new BasicHighlight(ren, projector));
   addEffect(&effects, 10, new BasicTracer(ren, projector));
   addEffect(&effects, 2,
             (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_FIXED));
   addEffect(&effects, 3,
-            (new RgbSplit(ren, projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));
-  addEffect(&effects, 3, new RollingShutter(ren));
+            (new RgbSplit(ren,
+  projector))->setMode(RGB_SPLIT_CENTER_OF_MASS));*/
+  // addEffect(&effects, 3, new RollingShutter(ren));
+  addEffect(&effects, 3, new BasicShadow(ren, projector));
 
   const unsigned int NUM_EFFECTS = effects.size();
 

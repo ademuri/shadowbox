@@ -89,10 +89,10 @@ void Effect::calculateFramerate() {
   Uint32 ticks = SDL_GetTicks();
   frames++;
   if (ticks > calcFramerateAt) {
-    std::cout << "Framerate: " << frames << std::endl;
+    std::cout << "Framerate: " << frames / 10.0 << std::endl;
 
     // Calculate the framerate again in about 1s
-    calcFramerateAt = SDL_GetTicks() + 999;
+    calcFramerateAt = SDL_GetTicks() + 9999;
     frames = 0;
   }
 }
